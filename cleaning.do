@@ -1,6 +1,6 @@
 /****************************************************************************
 * File name: cleaning.do
-* Author(s): Sze, J
+* Author(s): Sze, J; Moreno J
 * Date: 12/8/2018
 * Description: Cleaning raw data from NYPD Collisions Dataset
 * 
