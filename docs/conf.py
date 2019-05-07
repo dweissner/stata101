@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Stata 101'
-copyright = '2019, Jeremy J. Sze; Jaison Moreno; Mohamed Hassan; Omari'
-author = 'Jeremy J. Sze; Jaison Moreno; Mohamed Hassan; Omari'
+copyright = '2019, Jeremy J. Sze; Jaison Moreno; Omari-Khalid Rahman; Mohammed Husain'
+author = 'Jeremy J. Sze; Jaison Moreno; Omari-Khalid Rahman; Mohammed Husain'
 
 # The short X.Y version
 version = ''

@@ -5,6 +5,7 @@
 
 Welcome to Stata 101's documentation!
 =====================================
+Created by Jeremy J. Sze, Jaison Moreno, Omari-Khalid Rahman, Mohammed Husain
 
 .. toctree::
    :maxdepth: 2
