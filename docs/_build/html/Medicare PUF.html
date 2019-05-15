@@ -1,0 +1,1429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Physician and Other Supplier Data &mdash; Stata 101 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Cleaning" href="Cleaning.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Stata 101
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Install.html#User-written-files">User written files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Install.html#About-SSC">About SSC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Import.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cleaning.html">Cleaning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Physician and Other Supplier Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Importing">Importing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Motivation">Motivation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Question-1">Question 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Question-2">Question 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Question-3">Question 3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Stata 101</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Physician and Other Supplier Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Medicare PUF.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Physician-and-Other-Supplier-Data">
+<h1>Physician and Other Supplier Data<a class="headerlink" href="#Physician-and-Other-Supplier-Data" title="Permalink to this headline">¶</a></h1>
+<p>The Physician and Other Supplier Public Use File (Physician and Other Supplier PUF) provides information on services and procedures provided to Medicare beneficiaries by physicians and other healthcare professionals. The Physician and Other Supplier PUF contains information on utilization, payment (allowed amount and Medicare payment), and submitted charges organized by National Provider Identifier (NPI), Healthcare Common Procedure Coding System (HCPCS) code, and place of service. This PUF is
+based on information from CMS’s National Claims History Standard Analytic Files. The data in the Physician and Other Supplier PUF covers calendar year 2012 and contains 100% final-action physician/supplier Part B non-institutional line items for the Medicare fee-for-service population.</p>
+<p>While the Physician and Other Supplier PUF has a wealth of information on payment and utilization for Medicare Part B services, the dataset has a number of limitations. Of particular importance is the fact that the data may not be representative of a physician’s entire practice as it only includes information on Medicare fee-for-service beneficiaries. In addition, the data are not intended to indicate the quality of care provided and are not risk-adjusted to account for differences in underlying
+severity of disease of patient populations. For additional limitations, please review the methodology document available below.</p>
+<p>Description source:https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Medicare-Provider-Charge-Data/Physician-and-Other-Supplier2016.html</p>
+<p>Data source:https://data.cms.gov/browse?q=Medicare%20Provider%20Utilization&amp;sortBy=relevance</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">cd</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+C:\Users\jerem\Documents\Stata Class\code
+</pre></div></div>
+</div>
+<div class="section" id="Importing">
+<h2>Importing<a class="headerlink" href="#Importing" title="Permalink to this headline">¶</a></h2>
+<p>You can input the url of the dataset and import directly.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">*import delimited &quot;https://data.cms.gov/api/views/sk9b-znav/rows.csv?accessType=DOWNLOAD&quot;</span>
+</pre></div>
+</div>
+</div>
+<p>But I already have the dataset, so we will import from the local file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">local</span> filepath <span class="s">&quot;C:\Users\jerem\Box Sync\Geriatrics\KO\input_data\Medicare_PUF&quot;</span>
+import delimited <span class="s">&quot;</span><span class="nv">`filepath&#39;</span><span class="s">\Medicare_Provider_Utilization_and_Payment_Data__Physician_and_Other_Supplier_PUF_CY2015.csv&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+(26 vars, 9,497,892 obs)
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">local</span></code> is a <code class="docutils literal notranslate"><span class="pre">macro</span></code> Stata command that allows you to store strings to local macro names. “A macro has a macro name and macro contents. Everywhere a punctuated macro name appears in a command— punctuation is defined below—the macro contents are substituted for the macro name.”</p>
+<p>Source: <a class="reference external" href="https://www.stata.com/manuals13/pmacro.pdf">https://www.stata.com/manuals13/pmacro.pdf</a></p>
+<p>We <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">seed</span></code> so that we can reproduce this random sample again. 3535 is just a number I picked.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">set</span> seed <span class="m">3535</span>
+</pre></div>
+</div>
+</div>
+<p>This file is large. But since this is an exercise, we will take a small sample to work with.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sample</span></code> is a Stata command that allows you to randomly keep a certain percentage of the data. So <code class="docutils literal notranslate"><span class="pre">sample</span> <span class="pre">10</span></code>, samples 10% of the data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sample</span> <span class="m">10</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(8,548,103 observations deleted)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">describe</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Contains data
+  obs:       949,789
+ vars:            26
+ size:   578,421,501
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+nationalprovi~r long    %12.0g                National Provider Identifier
+lastnameorgan~o str70   %70s                  Last Name/Organization Name of the Provider
+firstnameofth~r str20   %20s                  First Name of the Provider
+middleinitial~r str1    %9s                   Middle Initial of the Provider
+credentialsof~r str20   %20s                  Credentials of the Provider
+genderofthepr~r str1    %9s                   Gender of the Provider
+entitytypeoft~r str1    %9s                   Entity Type of the Provider
+s~1oftheprovi~r str55   %55s                  Street Address 1 of the Provider
+s~2oftheprovi~r str55   %55s                  Street Address 2 of the Provider
+cityoftheprov~r str31   %31s                  City of the Provider
+zipcodeofthep~r str12   %12s                  Zip Code of the Provider
+statecodeofth~r str2    %9s                   State Code of the Provider
+countrycodeof~r str2    %9s                   Country Code of the Provider
+providertype    str43   %43s                  Provider Type
+medicareparti~r str1    %9s                   Medicare Participation Indicator
+placeofservice  str1    %9s                   Place of Service
+hcpcscode       str5    %9s                   HCPCS Code
+hcpcsdescript~n str256  %256s                 HCPCS Description
+hcpcsdrugindi~r str1    %9s                   HCPCS Drug Indicator
+numberofservi~s float   %9.0g                 Number of Services
+numberofmedic~s long    %12.0g                Number of Medicare Beneficiaries
+numberofdisti~i long    %12.0g                Number of Distinct Medicare Beneficiary/Per Day Services
+average~damount float   %9.0g                 Average Medicare Allowed Amount
+averagesubmit~t float   %9.0g                 Average Submitted Charge Amount
+average~tamount float   %9.0g                 Average Medicare Payment Amount
+averagemedica~n float   %9.0g                 Average Medicare Standardized Amount
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by:
+     Note: Dataset has changed since last saved.
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Motivation">
+<h2>Motivation<a class="headerlink" href="#Motivation" title="Permalink to this headline">¶</a></h2>
+<p>Question 1: How many physicians/organizations are there in each Stata in the random sample? Question 2: How much did each of the physicians/organizations in the random sample make? Question 3: Which providers provided Home Based Medical Care?</p>
+<div class="section" id="Question-1">
+<h3>Question 1<a class="headerlink" href="#Question-1" title="Permalink to this headline">¶</a></h3>
+<p>Is the data unique by providers?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">codebook</span> nationalprovideridentifier
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+nationalprovideridentifier                                                                                                                                                   National Provider Identifier
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [1.003e+09,1.993e+09]        units:  1
+         unique values:  475,439                  missing .:  0/949,789
+
+                  mean:   1.5e+09
+              std. dev:   2.9e+08
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.1e+09   1.2e+09   1.5e+09   1.7e+09   1.9e+09
+</pre></div></div>
+</div>
+<p>There are 475,439 providers/physicians in the random sample.</p>
+</div>
+<div class="section" id="Question-2">
+<h3>Question 2<a class="headerlink" href="#Question-2" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> averagemedicarepaymentamount, detail
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+               Average Medicare Payment Amount
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .6027273              0
+ 5%     3.518688              0
+10%     6.949286       .0006613       Obs             949,789
+25%     18.46324       .0028188       Sum of Wgt.     949,789
+
+50%     45.83917                      Mean           76.92642
+                        Largest       Std. Dev.      195.5731
+75%     85.54122       20864.97
+90%     154.0762       23352.66       Variance       38248.86
+95%     198.7759       28177.47       Skewness       40.83472
+99%     648.9693       28266.43       Kurtosis       3300.137
+</pre></div></div>
+</div>
+<p>We can see that there are 475,439 unique values in nationalprovideridentifier. But there are 949,789 observations. So we can say that the data is not unique by providers. Therefore, in order find out how much does each provider in the sample makes, we will need to collapse the data by providers.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">gen</span> totalmedicarepaymentamount = numberofmedicarebeneficiaries<span class="o">*</span>averagemedicarepaymentamount
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">preserve</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">collapse</span> (sum)totalmedicarepaymentamount (first) firstnameoftheprovider lastnameorganizationnameofthepro,<span class="k"> by</span>(nationalprovideridentifier)<span class="k"></span>
+<span class="k">sum</span> totalmedicarepaymentamount,<span class="k"></span>
+<span class="k">list</span> nationalprovideridentifier firstnameoftheprovider lastnameorganizationnameofthepro<span class="k"> if</span> totalmedicarepaymentamount <span class="o">==</span> <span class="nf">r</span>(max)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+totalmedic~t |    475,439    10389.15    99054.22          0   4.70e+07
+
+
+        +-----------------------------------------------------+
+        | national~r   firstn~r   lastnameorganizationnameo~o |
+        |-----------------------------------------------------|
+192981. | 1407855240              ROCKY MOUNTAIN HOLDINGS LLC |
+        +-----------------------------------------------------+
+</pre></div></div>
+</div>
+<p>Rocky Mountain Holdings LLC made the most in this random sample.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">histogram</span> totalmedicarepaymentamount
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(bin=56, start=0, width=839759.37)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 15.1 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+    &lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+    &lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+    &lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+    &lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+    &lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+    &lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1714.24&quot; x2=&quot;3859.02&quot; y2=&quot;1714.24&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;939.17&quot; x2=&quot;3859.02&quot; y2=&quot;939.17&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;482.01&quot; y=&quot;644.02&quot; width=&quot;55.56&quot; height=&quot;1845.17&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;486.33&quot; y=&quot;648.33&quot; width=&quot;46.92&quot; height=&quot;1836.53&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;537.57&quot; y=&quot;2488.94&quot; width=&quot;55.69&quot; height=&quot;0.25&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;541.89&quot; y=&quot;2493.26&quot; width=&quot;47.05&quot; height=&quot;-8.39&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;593.26&quot; y=&quot;2489.06&quot; width=&quot;55.69&quot; height=&quot;0.12&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;597.58&quot; y=&quot;2493.38&quot; width=&quot;47.05&quot; height=&quot;-8.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;648.95&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;653.26&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;704.63&quot; y=&quot;2489.19&quot; width=&quot;55.56&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;708.95&quot; y=&quot;2493.51&quot; width=&quot;46.92&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;760.20&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;764.52&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;815.88&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;820.20&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;871.57&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;875.89&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;927.26&quot; y=&quot;2489.19&quot; width=&quot;55.56&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;931.58&quot; y=&quot;2493.51&quot; width=&quot;46.92&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1038.51&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1042.83&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1261.14&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1265.46&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1428.08&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1432.39&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1539.45&quot; y=&quot;2489.19&quot; width=&quot;55.56&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1543.77&quot; y=&quot;2493.51&quot; width=&quot;46.92&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1873.33&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1877.65&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3542.96&quot; y=&quot;2489.19&quot; width=&quot;55.69&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3547.28&quot; y=&quot;2493.51&quot; width=&quot;47.05&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1714.24&quot; x2=&quot;350.83&quot; y2=&quot;1714.24&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;1714.24&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1714.24)&quot; text-anchor=&quot;middle&quot;&gt;5.0e-07&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;939.17&quot; x2=&quot;350.83&quot; y2=&quot;939.17&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;939.17&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,939.17)&quot; text-anchor=&quot;middle&quot;&gt;1.0e-06&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;164.22&quot; x2=&quot;350.83&quot; y2=&quot;164.22&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;164.22&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,164.22)&quot; text-anchor=&quot;middle&quot;&gt;1.5e-06&lt;/text&gt;
+    &lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Density&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;482.01&quot; y1=&quot;2489.19&quot; x2=&quot;482.01&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;482.01&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+    &lt;line x1=&quot;1144.69&quot; y1=&quot;2489.19&quot; x2=&quot;1144.69&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;1144.69&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;1.00e+07&lt;/text&gt;
+    &lt;line x1=&quot;1807.49&quot; y1=&quot;2489.19&quot; x2=&quot;1807.49&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;1807.49&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;2.00e+07&lt;/text&gt;
+    &lt;line x1=&quot;2470.17&quot; y1=&quot;2489.19&quot; x2=&quot;2470.17&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;2470.17&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;3.00e+07&lt;/text&gt;
+    &lt;line x1=&quot;3132.98&quot; y1=&quot;2489.19&quot; x2=&quot;3132.98&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;3132.98&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;4.00e+07&lt;/text&gt;
+    &lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5.00e+07&lt;/text&gt;
+    &lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;(sum) totalmedicarepaymentamount&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> totalmedicarepaymentamount, detail
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+              (sum) totalmedicarepaymentamount
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%        55.86              0
+ 5%       247.43       .0072745
+10%       468.12       .0478853       Obs             475,439
+25%     1226.516            .11       Sum of Wgt.     475,439
+
+50%     3457.588                      Mean           10389.15
+                        Largest       Std. Dev.      99054.22
+75%     9697.688       1.46e+07
+90%     22315.24       1.62e+07       Variance       9.81e+09
+95%     35582.24       2.18e+07       Skewness         281.06
+99%     87061.88       4.70e+07       Kurtosis       115756.7
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">gen</span> ltotalmedicarepaymentamount =<span class="k"> log</span>(totalmedicarepaymentamount)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1 missing value generated)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">label</span> variable ltotalmedicarepaymentamount <span class="s">&quot;log of totalmedicarepaymentamount&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">histogram</span> ltotalmedicarepaymentamount, normal
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(bin=56, start=-4.9233861, width=.40338585)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+                <iframe frameborder="0" scrolling="no" height="436" width="600"                srcdoc="<html><body>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!-- This is a Stata 15.1 generated SVG file (http://www.stata.com) --&gt;
+
+&lt;svg version=&quot;1.1&quot; width=&quot;600px&quot; height=&quot;436px&quot; viewBox=&quot;0 0 3960 2880&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+    &lt;desc&gt;Stata Graph - Graph&lt;/desc&gt;
+    &lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;3960&quot; height=&quot;2880&quot; style=&quot;fill:#EAF2F3;stroke:none&quot;/&gt;
+    &lt;rect x=&quot;0.00&quot; y=&quot;0.00&quot; width=&quot;3959.88&quot; height=&quot;2880.00&quot; style=&quot;fill:#EAF2F3&quot;/&gt;
+    &lt;rect x=&quot;2.88&quot; y=&quot;2.88&quot; width=&quot;3954.12&quot; height=&quot;2874.24&quot; style=&quot;fill:none;stroke:#EAF2F3;stroke-width:5.76&quot;/&gt;
+    &lt;rect x=&quot;390.80&quot; y=&quot;100.86&quot; width=&quot;3468.22&quot; height=&quot;2388.33&quot; style=&quot;fill:#FFFFFF&quot;/&gt;
+    &lt;rect x=&quot;393.68&quot; y=&quot;103.74&quot; width=&quot;3462.46&quot; height=&quot;2382.57&quot; style=&quot;fill:none;stroke:#FFFFFF;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2035.75&quot; x2=&quot;3859.02&quot; y2=&quot;2035.75&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1582.44&quot; x2=&quot;3859.02&quot; y2=&quot;1582.44&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1129.01&quot; x2=&quot;3859.02&quot; y2=&quot;1129.01&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;675.57&quot; x2=&quot;3859.02&quot; y2=&quot;675.57&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;222.14&quot; x2=&quot;3859.02&quot; y2=&quot;222.14&quot; style=&quot;stroke:#EAF2F3;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;481.02&quot; y=&quot;2489.19&quot; width=&quot;53.58&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;485.34&quot; y=&quot;2493.51&quot; width=&quot;44.94&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;695.60&quot; y=&quot;2489.19&quot; width=&quot;53.58&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;699.92&quot; y=&quot;2493.51&quot; width=&quot;44.94&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;802.89&quot; y=&quot;2488.94&quot; width=&quot;53.58&quot; height=&quot;0.25&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;807.21&quot; y=&quot;2493.26&quot; width=&quot;44.94&quot; height=&quot;-8.39&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;856.47&quot; y=&quot;2488.57&quot; width=&quot;53.71&quot; height=&quot;0.62&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;860.79&quot; y=&quot;2492.89&quot; width=&quot;45.07&quot; height=&quot;-8.02&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;910.18&quot; y=&quot;2488.44&quot; width=&quot;53.58&quot; height=&quot;0.74&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;914.50&quot; y=&quot;2492.76&quot; width=&quot;44.94&quot; height=&quot;-7.90&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;963.76&quot; y=&quot;2488.44&quot; width=&quot;53.71&quot; height=&quot;0.74&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;968.08&quot; y=&quot;2492.76&quot; width=&quot;45.07&quot; height=&quot;-7.90&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1017.47&quot; y=&quot;2488.57&quot; width=&quot;53.58&quot; height=&quot;0.62&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1021.79&quot; y=&quot;2492.89&quot; width=&quot;44.94&quot; height=&quot;-8.02&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1071.06&quot; y=&quot;2487.33&quot; width=&quot;53.71&quot; height=&quot;1.86&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1075.38&quot; y=&quot;2491.65&quot; width=&quot;45.07&quot; height=&quot;-6.78&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1124.76&quot; y=&quot;2484.36&quot; width=&quot;53.58&quot; height=&quot;4.83&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1129.08&quot; y=&quot;2488.68&quot; width=&quot;44.94&quot; height=&quot;-3.81&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1178.35&quot; y=&quot;2483.12&quot; width=&quot;53.71&quot; height=&quot;6.06&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1182.67&quot; y=&quot;2487.44&quot; width=&quot;45.07&quot; height=&quot;-2.58&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1232.06&quot; y=&quot;2482.26&quot; width=&quot;53.71&quot; height=&quot;6.93&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1236.37&quot; y=&quot;2486.57&quot; width=&quot;45.07&quot; height=&quot;-1.71&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1285.76&quot; y=&quot;2481.76&quot; width=&quot;53.58&quot; height=&quot;7.43&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1290.08&quot; y=&quot;2486.08&quot; width=&quot;44.94&quot; height=&quot;-1.21&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1339.35&quot; y=&quot;2478.17&quot; width=&quot;53.71&quot; height=&quot;11.01&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1343.67&quot; y=&quot;2482.49&quot; width=&quot;45.07&quot; height=&quot;2.37&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1393.05&quot; y=&quot;2477.43&quot; width=&quot;53.58&quot; height=&quot;11.76&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1397.37&quot; y=&quot;2481.75&quot; width=&quot;44.94&quot; height=&quot;3.12&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1446.64&quot; y=&quot;2476.81&quot; width=&quot;53.71&quot; height=&quot;12.38&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1450.96&quot; y=&quot;2481.13&quot; width=&quot;45.07&quot; height=&quot;3.74&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1500.35&quot; y=&quot;2472.97&quot; width=&quot;53.58&quot; height=&quot;16.21&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1504.66&quot; y=&quot;2477.29&quot; width=&quot;44.94&quot; height=&quot;7.57&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1553.93&quot; y=&quot;2455.28&quot; width=&quot;53.71&quot; height=&quot;33.91&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1558.25&quot; y=&quot;2459.60&quot; width=&quot;45.07&quot; height=&quot;25.27&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1607.64&quot; y=&quot;2397.24&quot; width=&quot;53.58&quot; height=&quot;91.95&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1611.96&quot; y=&quot;2401.56&quot; width=&quot;44.94&quot; height=&quot;83.31&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1661.22&quot; y=&quot;2371.25&quot; width=&quot;53.71&quot; height=&quot;117.94&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1665.54&quot; y=&quot;2375.57&quot; width=&quot;45.07&quot; height=&quot;109.30&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1714.93&quot; y=&quot;2319.89&quot; width=&quot;53.58&quot; height=&quot;169.30&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1719.25&quot; y=&quot;2324.21&quot; width=&quot;44.94&quot; height=&quot;160.66&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1768.51&quot; y=&quot;2228.19&quot; width=&quot;53.71&quot; height=&quot;261.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1772.83&quot; y=&quot;2232.51&quot; width=&quot;45.07&quot; height=&quot;252.36&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1822.22&quot; y=&quot;2048.99&quot; width=&quot;53.58&quot; height=&quot;440.19&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1826.54&quot; y=&quot;2053.31&quot; width=&quot;44.94&quot; height=&quot;431.55&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1875.80&quot; y=&quot;1822.15&quot; width=&quot;53.71&quot; height=&quot;667.03&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1880.12&quot; y=&quot;1826.47&quot; width=&quot;45.07&quot; height=&quot;658.39&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1929.51&quot; y=&quot;1557.07&quot; width=&quot;53.58&quot; height=&quot;932.11&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1933.83&quot; y=&quot;1561.39&quot; width=&quot;44.94&quot; height=&quot;923.47&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;1983.09&quot; y=&quot;1139.03&quot; width=&quot;53.71&quot; height=&quot;1350.15&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;1987.41&quot; y=&quot;1143.35&quot; width=&quot;45.07&quot; height=&quot;1341.51&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2036.80&quot; y=&quot;704.28&quot; width=&quot;53.71&quot; height=&quot;1784.90&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2041.12&quot; y=&quot;708.60&quot; width=&quot;45.07&quot; height=&quot;1776.26&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2090.51&quot; y=&quot;383.02&quot; width=&quot;53.58&quot; height=&quot;2106.17&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2094.83&quot; y=&quot;387.34&quot; width=&quot;44.94&quot; height=&quot;2097.53&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2144.09&quot; y=&quot;219.79&quot; width=&quot;53.71&quot; height=&quot;2269.40&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2148.41&quot; y=&quot;224.11&quot; width=&quot;45.07&quot; height=&quot;2260.76&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2197.80&quot; y=&quot;170.53&quot; width=&quot;53.58&quot; height=&quot;2318.65&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2202.12&quot; y=&quot;174.85&quot; width=&quot;44.94&quot; height=&quot;2310.01&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2251.38&quot; y=&quot;245.90&quot; width=&quot;53.71&quot; height=&quot;2243.29&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2255.70&quot; y=&quot;250.22&quot; width=&quot;45.07&quot; height=&quot;2234.65&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2305.09&quot; y=&quot;421.63&quot; width=&quot;53.58&quot; height=&quot;2067.56&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2309.41&quot; y=&quot;425.95&quot; width=&quot;44.94&quot; height=&quot;2058.92&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2358.68&quot; y=&quot;676.07&quot; width=&quot;53.71&quot; height=&quot;1813.12&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2362.99&quot; y=&quot;680.39&quot; width=&quot;45.07&quot; height=&quot;1804.48&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2412.38&quot; y=&quot;1039.41&quot; width=&quot;53.58&quot; height=&quot;1449.78&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2416.70&quot; y=&quot;1043.73&quot; width=&quot;44.94&quot; height=&quot;1441.14&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2465.97&quot; y=&quot;1471.80&quot; width=&quot;53.71&quot; height=&quot;1017.38&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2470.29&quot; y=&quot;1476.12&quot; width=&quot;45.07&quot; height=&quot;1008.74&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2519.67&quot; y=&quot;1869.43&quot; width=&quot;53.58&quot; height=&quot;619.76&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2523.99&quot; y=&quot;1873.75&quot; width=&quot;44.94&quot; height=&quot;611.12&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2573.26&quot; y=&quot;2146.26&quot; width=&quot;53.71&quot; height=&quot;342.92&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2577.58&quot; y=&quot;2150.58&quot; width=&quot;45.07&quot; height=&quot;334.28&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2626.97&quot; y=&quot;2336.10&quot; width=&quot;53.58&quot; height=&quot;153.08&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2631.28&quot; y=&quot;2340.42&quot; width=&quot;44.94&quot; height=&quot;144.44&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2680.55&quot; y=&quot;2416.42&quot; width=&quot;53.71&quot; height=&quot;72.77&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2684.87&quot; y=&quot;2420.74&quot; width=&quot;45.07&quot; height=&quot;64.13&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2734.26&quot; y=&quot;2453.05&quot; width=&quot;53.58&quot; height=&quot;36.14&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2738.58&quot; y=&quot;2457.37&quot; width=&quot;44.94&quot; height=&quot;27.50&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2787.84&quot; y=&quot;2471.24&quot; width=&quot;53.71&quot; height=&quot;17.94&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2792.16&quot; y=&quot;2475.56&quot; width=&quot;45.07&quot; height=&quot;9.30&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2841.55&quot; y=&quot;2479.66&quot; width=&quot;53.58&quot; height=&quot;9.53&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2845.87&quot; y=&quot;2483.98&quot; width=&quot;44.94&quot; height=&quot;0.89&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2895.13&quot; y=&quot;2484.48&quot; width=&quot;53.71&quot; height=&quot;4.70&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2899.45&quot; y=&quot;2488.80&quot; width=&quot;45.07&quot; height=&quot;-3.94&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;2948.84&quot; y=&quot;2486.71&quot; width=&quot;53.71&quot; height=&quot;2.48&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;2953.16&quot; y=&quot;2491.03&quot; width=&quot;45.07&quot; height=&quot;-6.16&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3002.55&quot; y=&quot;2487.70&quot; width=&quot;53.58&quot; height=&quot;1.49&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3006.87&quot; y=&quot;2492.02&quot; width=&quot;44.94&quot; height=&quot;-7.15&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3056.13&quot; y=&quot;2487.70&quot; width=&quot;53.71&quot; height=&quot;1.49&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3060.45&quot; y=&quot;2492.02&quot; width=&quot;45.07&quot; height=&quot;-7.15&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3109.84&quot; y=&quot;2488.57&quot; width=&quot;53.58&quot; height=&quot;0.62&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3114.16&quot; y=&quot;2492.89&quot; width=&quot;44.94&quot; height=&quot;-8.02&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3163.42&quot; y=&quot;2488.69&quot; width=&quot;53.71&quot; height=&quot;0.50&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3167.74&quot; y=&quot;2493.01&quot; width=&quot;45.07&quot; height=&quot;-8.14&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3217.13&quot; y=&quot;2489.06&quot; width=&quot;53.58&quot; height=&quot;0.12&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3221.45&quot; y=&quot;2493.38&quot; width=&quot;44.94&quot; height=&quot;-8.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3270.71&quot; y=&quot;2489.06&quot; width=&quot;53.71&quot; height=&quot;0.12&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3275.03&quot; y=&quot;2493.38&quot; width=&quot;45.07&quot; height=&quot;-8.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3324.42&quot; y=&quot;2489.06&quot; width=&quot;53.58&quot; height=&quot;0.12&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3328.74&quot; y=&quot;2493.38&quot; width=&quot;44.94&quot; height=&quot;-8.52&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3378.00&quot; y=&quot;2489.19&quot; width=&quot;53.71&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3382.32&quot; y=&quot;2493.51&quot; width=&quot;45.07&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;rect x=&quot;3431.71&quot; y=&quot;2489.19&quot; width=&quot;53.58&quot; height=&quot;0.00&quot; style=&quot;fill:#CAC27E&quot;/&gt;
+    &lt;rect x=&quot;3436.03&quot; y=&quot;2493.51&quot; width=&quot;44.94&quot; height=&quot;-8.64&quot; style=&quot;fill:none;stroke:#D7D29E;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;480.89&quot; y1=&quot;2489.31&quot; x2=&quot;490.92&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;490.92&quot; y1=&quot;2489.31&quot; x2=&quot;500.94&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;500.94&quot; y1=&quot;2489.31&quot; x2=&quot;511.09&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;511.09&quot; y1=&quot;2489.31&quot; x2=&quot;521.11&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;521.11&quot; y1=&quot;2489.31&quot; x2=&quot;531.13&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;531.13&quot; y1=&quot;2489.31&quot; x2=&quot;541.16&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;541.16&quot; y1=&quot;2489.31&quot; x2=&quot;551.18&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;551.18&quot; y1=&quot;2489.31&quot; x2=&quot;561.33&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;561.33&quot; y1=&quot;2489.31&quot; x2=&quot;571.35&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;571.35&quot; y1=&quot;2489.31&quot; x2=&quot;581.38&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;581.38&quot; y1=&quot;2489.31&quot; x2=&quot;591.40&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;591.40&quot; y1=&quot;2489.31&quot; x2=&quot;601.42&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;601.42&quot; y1=&quot;2489.31&quot; x2=&quot;611.57&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;611.57&quot; y1=&quot;2489.31&quot; x2=&quot;621.60&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;621.60&quot; y1=&quot;2489.31&quot; x2=&quot;631.62&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;631.62&quot; y1=&quot;2489.31&quot; x2=&quot;641.64&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;641.64&quot; y1=&quot;2489.31&quot; x2=&quot;651.67&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;651.67&quot; y1=&quot;2489.31&quot; x2=&quot;661.82&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;661.82&quot; y1=&quot;2489.31&quot; x2=&quot;671.84&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;671.84&quot; y1=&quot;2489.31&quot; x2=&quot;681.86&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;681.86&quot; y1=&quot;2489.31&quot; x2=&quot;691.89&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;691.89&quot; y1=&quot;2489.31&quot; x2=&quot;701.91&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;701.91&quot; y1=&quot;2489.31&quot; x2=&quot;712.06&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;712.06&quot; y1=&quot;2489.31&quot; x2=&quot;722.08&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;722.08&quot; y1=&quot;2489.31&quot; x2=&quot;732.11&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;732.11&quot; y1=&quot;2489.31&quot; x2=&quot;742.13&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;742.13&quot; y1=&quot;2489.31&quot; x2=&quot;752.15&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;752.15&quot; y1=&quot;2489.31&quot; x2=&quot;762.30&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;762.30&quot; y1=&quot;2489.31&quot; x2=&quot;772.32&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;772.32&quot; y1=&quot;2489.31&quot; x2=&quot;782.35&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;782.35&quot; y1=&quot;2489.31&quot; x2=&quot;792.37&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;792.37&quot; y1=&quot;2489.31&quot; x2=&quot;802.39&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;802.39&quot; y1=&quot;2489.31&quot; x2=&quot;812.54&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;812.54&quot; y1=&quot;2489.31&quot; x2=&quot;822.57&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;822.57&quot; y1=&quot;2489.31&quot; x2=&quot;832.59&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;832.59&quot; y1=&quot;2489.31&quot; x2=&quot;842.61&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;842.61&quot; y1=&quot;2489.31&quot; x2=&quot;852.64&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;852.64&quot; y1=&quot;2489.31&quot; x2=&quot;862.78&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;862.78&quot; y1=&quot;2489.31&quot; x2=&quot;872.81&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;872.81&quot; y1=&quot;2489.31&quot; x2=&quot;882.83&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;882.83&quot; y1=&quot;2489.31&quot; x2=&quot;892.86&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;892.86&quot; y1=&quot;2489.31&quot; x2=&quot;902.88&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;902.88&quot; y1=&quot;2489.31&quot; x2=&quot;913.03&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;913.03&quot; y1=&quot;2489.31&quot; x2=&quot;923.05&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;923.05&quot; y1=&quot;2489.31&quot; x2=&quot;933.08&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;933.08&quot; y1=&quot;2489.31&quot; x2=&quot;943.10&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;943.10&quot; y1=&quot;2489.31&quot; x2=&quot;953.12&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;953.12&quot; y1=&quot;2489.31&quot; x2=&quot;963.27&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;963.27&quot; y1=&quot;2489.31&quot; x2=&quot;973.29&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;973.29&quot; y1=&quot;2489.31&quot; x2=&quot;983.32&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;983.32&quot; y1=&quot;2489.31&quot; x2=&quot;993.34&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;993.34&quot; y1=&quot;2489.31&quot; x2=&quot;1003.37&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1003.37&quot; y1=&quot;2489.31&quot; x2=&quot;1013.39&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1013.39&quot; y1=&quot;2489.31&quot; x2=&quot;1023.54&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1023.54&quot; y1=&quot;2489.31&quot; x2=&quot;1033.56&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1033.56&quot; y1=&quot;2489.31&quot; x2=&quot;1043.58&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1043.58&quot; y1=&quot;2489.31&quot; x2=&quot;1053.61&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1053.61&quot; y1=&quot;2489.31&quot; x2=&quot;1063.63&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1063.63&quot; y1=&quot;2489.31&quot; x2=&quot;1073.78&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1073.78&quot; y1=&quot;2489.31&quot; x2=&quot;1083.80&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1083.80&quot; y1=&quot;2489.31&quot; x2=&quot;1093.83&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1093.83&quot; y1=&quot;2489.31&quot; x2=&quot;1103.85&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1103.85&quot; y1=&quot;2489.31&quot; x2=&quot;1113.87&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1113.87&quot; y1=&quot;2489.31&quot; x2=&quot;1124.02&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1124.02&quot; y1=&quot;2489.31&quot; x2=&quot;1134.05&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1134.05&quot; y1=&quot;2489.31&quot; x2=&quot;1144.07&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1144.07&quot; y1=&quot;2489.31&quot; x2=&quot;1154.09&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1154.09&quot; y1=&quot;2489.31&quot; x2=&quot;1164.12&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1164.12&quot; y1=&quot;2489.31&quot; x2=&quot;1174.26&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1174.26&quot; y1=&quot;2489.31&quot; x2=&quot;1184.29&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1184.29&quot; y1=&quot;2489.31&quot; x2=&quot;1194.31&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1194.31&quot; y1=&quot;2489.31&quot; x2=&quot;1204.34&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1204.34&quot; y1=&quot;2489.31&quot; x2=&quot;1214.36&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1214.36&quot; y1=&quot;2489.31&quot; x2=&quot;1224.51&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1224.51&quot; y1=&quot;2489.19&quot; x2=&quot;1234.53&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1234.53&quot; y1=&quot;2489.19&quot; x2=&quot;1244.55&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1244.55&quot; y1=&quot;2489.19&quot; x2=&quot;1254.58&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1254.58&quot; y1=&quot;2489.19&quot; x2=&quot;1264.60&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1264.60&quot; y1=&quot;2489.19&quot; x2=&quot;1274.75&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1274.75&quot; y1=&quot;2489.19&quot; x2=&quot;1284.77&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1284.77&quot; y1=&quot;2489.19&quot; x2=&quot;1294.80&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1294.80&quot; y1=&quot;2489.19&quot; x2=&quot;1304.82&quot; y2=&quot;2489.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1304.82&quot; y1=&quot;2489.06&quot; x2=&quot;1314.84&quot; y2=&quot;2489.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1314.84&quot; y1=&quot;2489.06&quot; x2=&quot;1324.99&quot; y2=&quot;2489.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1324.99&quot; y1=&quot;2489.06&quot; x2=&quot;1335.02&quot; y2=&quot;2488.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1335.02&quot; y1=&quot;2488.94&quot; x2=&quot;1345.04&quot; y2=&quot;2488.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1345.04&quot; y1=&quot;2488.94&quot; x2=&quot;1355.06&quot; y2=&quot;2488.81&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1355.06&quot; y1=&quot;2488.81&quot; x2=&quot;1365.09&quot; y2=&quot;2488.69&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1365.09&quot; y1=&quot;2488.69&quot; x2=&quot;1375.23&quot; y2=&quot;2488.57&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1375.23&quot; y1=&quot;2488.57&quot; x2=&quot;1385.26&quot; y2=&quot;2488.44&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1385.26&quot; y1=&quot;2488.44&quot; x2=&quot;1395.28&quot; y2=&quot;2488.32&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1395.28&quot; y1=&quot;2488.32&quot; x2=&quot;1405.31&quot; y2=&quot;2488.07&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1405.31&quot; y1=&quot;2488.07&quot; x2=&quot;1415.33&quot; y2=&quot;2487.82&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1415.33&quot; y1=&quot;2487.82&quot; x2=&quot;1425.48&quot; y2=&quot;2487.58&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1425.48&quot; y1=&quot;2487.58&quot; x2=&quot;1435.50&quot; y2=&quot;2487.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1435.50&quot; y1=&quot;2487.21&quot; x2=&quot;1445.52&quot; y2=&quot;2486.83&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1445.52&quot; y1=&quot;2486.83&quot; x2=&quot;1455.55&quot; y2=&quot;2486.34&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1455.55&quot; y1=&quot;2486.34&quot; x2=&quot;1465.57&quot; y2=&quot;2485.84&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1465.57&quot; y1=&quot;2485.84&quot; x2=&quot;1475.72&quot; y2=&quot;2485.23&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1475.72&quot; y1=&quot;2485.23&quot; x2=&quot;1485.74&quot; y2=&quot;2484.36&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1485.74&quot; y1=&quot;2484.36&quot; x2=&quot;1495.77&quot; y2=&quot;2483.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1495.77&quot; y1=&quot;2483.49&quot; x2=&quot;1505.79&quot; y2=&quot;2482.50&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1505.79&quot; y1=&quot;2482.50&quot; x2=&quot;1515.81&quot; y2=&quot;2481.27&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1515.81&quot; y1=&quot;2481.27&quot; x2=&quot;1525.96&quot; y2=&quot;2479.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1525.96&quot; y1=&quot;2479.78&quot; x2=&quot;1535.98&quot; y2=&quot;2478.17&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1535.98&quot; y1=&quot;2478.17&quot; x2=&quot;1546.01&quot; y2=&quot;2476.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1546.01&quot; y1=&quot;2476.31&quot; x2=&quot;1556.03&quot; y2=&quot;2474.09&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1556.03&quot; y1=&quot;2474.09&quot; x2=&quot;1566.06&quot; y2=&quot;2471.61&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1566.06&quot; y1=&quot;2471.61&quot; x2=&quot;1576.08&quot; y2=&quot;2468.77&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1576.08&quot; y1=&quot;2468.77&quot; x2=&quot;1586.23&quot; y2=&quot;2465.55&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1586.23&quot; y1=&quot;2465.55&quot; x2=&quot;1596.25&quot; y2=&quot;2461.71&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1596.25&quot; y1=&quot;2461.71&quot; x2=&quot;1606.28&quot; y2=&quot;2457.50&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1606.28&quot; y1=&quot;2457.50&quot; x2=&quot;1616.30&quot; y2=&quot;2452.68&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1616.30&quot; y1=&quot;2452.68&quot; x2=&quot;1626.32&quot; y2=&quot;2447.23&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1626.32&quot; y1=&quot;2447.23&quot; x2=&quot;1636.47&quot; y2=&quot;2441.17&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1636.47&quot; y1=&quot;2441.17&quot; x2=&quot;1646.49&quot; y2=&quot;2434.24&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1646.49&quot; y1=&quot;2434.24&quot; x2=&quot;1656.52&quot; y2=&quot;2426.44&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1656.52&quot; y1=&quot;2426.44&quot; x2=&quot;1666.54&quot; y2=&quot;2417.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1666.54&quot; y1=&quot;2417.78&quot; x2=&quot;1676.57&quot; y2=&quot;2408.13&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1676.57&quot; y1=&quot;2408.13&quot; x2=&quot;1686.71&quot; y2=&quot;2397.36&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1686.71&quot; y1=&quot;2397.36&quot; x2=&quot;1696.74&quot; y2=&quot;2385.36&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1696.74&quot; y1=&quot;2385.36&quot; x2=&quot;1706.76&quot; y2=&quot;2372.11&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1706.76&quot; y1=&quot;2372.11&quot; x2=&quot;1716.78&quot; y2=&quot;2357.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1716.78&quot; y1=&quot;2357.51&quot; x2=&quot;1726.81&quot; y2=&quot;2341.55&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1726.81&quot; y1=&quot;2341.55&quot; x2=&quot;1736.95&quot; y2=&quot;2323.85&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1736.95&quot; y1=&quot;2323.85&quot; x2=&quot;1746.98&quot; y2=&quot;2304.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1746.98&quot; y1=&quot;2304.54&quot; x2=&quot;1757.00&quot; y2=&quot;2283.38&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1757.00&quot; y1=&quot;2283.38&quot; x2=&quot;1767.03&quot; y2=&quot;2260.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1767.03&quot; y1=&quot;2260.49&quot; x2=&quot;1777.05&quot; y2=&quot;2235.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1777.05&quot; y1=&quot;2235.49&quot; x2=&quot;1787.20&quot; y2=&quot;2208.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1787.20&quot; y1=&quot;2208.51&quot; x2=&quot;1797.22&quot; y2=&quot;2179.43&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1797.22&quot; y1=&quot;2179.43&quot; x2=&quot;1807.24&quot; y2=&quot;2148.12&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1807.24&quot; y1=&quot;2148.12&quot; x2=&quot;1817.27&quot; y2=&quot;2114.46&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1817.27&quot; y1=&quot;2114.46&quot; x2=&quot;1827.29&quot; y2=&quot;2078.57&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1827.29&quot; y1=&quot;2078.57&quot; x2=&quot;1837.44&quot; y2=&quot;2040.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1837.44&quot; y1=&quot;2040.21&quot; x2=&quot;1847.46&quot; y2=&quot;1999.49&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1847.46&quot; y1=&quot;1999.49&quot; x2=&quot;1857.49&quot; y2=&quot;1956.18&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1857.49&quot; y1=&quot;1956.18&quot; x2=&quot;1867.51&quot; y2=&quot;1910.64&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1867.51&quot; y1=&quot;1910.64&quot; x2=&quot;1877.54&quot; y2=&quot;1862.50&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1877.54&quot; y1=&quot;1862.50&quot; x2=&quot;1887.68&quot; y2=&quot;1812.00&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1887.68&quot; y1=&quot;1812.00&quot; x2=&quot;1897.71&quot; y2=&quot;1759.16&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1897.71&quot; y1=&quot;1759.16&quot; x2=&quot;1907.73&quot; y2=&quot;1704.09&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1907.73&quot; y1=&quot;1704.09&quot; x2=&quot;1917.75&quot; y2=&quot;1646.92&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1917.75&quot; y1=&quot;1646.92&quot; x2=&quot;1927.78&quot; y2=&quot;1587.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1927.78&quot; y1=&quot;1587.51&quot; x2=&quot;1937.92&quot; y2=&quot;1526.38&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1937.92&quot; y1=&quot;1526.38&quot; x2=&quot;1947.95&quot; y2=&quot;1463.39&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1947.95&quot; y1=&quot;1463.39&quot; x2=&quot;1957.97&quot; y2=&quot;1398.91&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1957.97&quot; y1=&quot;1398.91&quot; x2=&quot;1968.00&quot; y2=&quot;1333.20&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1968.00&quot; y1=&quot;1333.20&quot; x2=&quot;1978.02&quot; y2=&quot;1266.25&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1978.02&quot; y1=&quot;1266.25&quot; x2=&quot;1988.17&quot; y2=&quot;1198.56&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1988.17&quot; y1=&quot;1198.56&quot; x2=&quot;1998.19&quot; y2=&quot;1130.37&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;1998.19&quot; y1=&quot;1130.37&quot; x2=&quot;2008.21&quot; y2=&quot;1061.93&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2008.21&quot; y1=&quot;1061.93&quot; x2=&quot;2018.24&quot; y2=&quot;993.50&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2018.24&quot; y1=&quot;993.50&quot; x2=&quot;2028.26&quot; y2=&quot;925.56&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2028.26&quot; y1=&quot;925.56&quot; x2=&quot;2038.41&quot; y2=&quot;858.36&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2038.41&quot; y1=&quot;858.36&quot; x2=&quot;2048.43&quot; y2=&quot;792.27&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2048.43&quot; y1=&quot;792.27&quot; x2=&quot;2058.46&quot; y2=&quot;727.67&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2058.46&quot; y1=&quot;727.67&quot; x2=&quot;2068.48&quot; y2=&quot;664.93&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2068.48&quot; y1=&quot;664.93&quot; x2=&quot;2078.51&quot; y2=&quot;604.29&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2078.51&quot; y1=&quot;604.29&quot; x2=&quot;2088.65&quot; y2=&quot;546.37&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2088.65&quot; y1=&quot;546.37&quot; x2=&quot;2098.68&quot; y2=&quot;491.30&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2098.68&quot; y1=&quot;491.30&quot; x2=&quot;2108.70&quot; y2=&quot;439.57&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2108.70&quot; y1=&quot;439.57&quot; x2=&quot;2118.72&quot; y2=&quot;391.43&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2118.72&quot; y1=&quot;391.43&quot; x2=&quot;2128.75&quot; y2=&quot;347.25&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2128.75&quot; y1=&quot;347.25&quot; x2=&quot;2138.77&quot; y2=&quot;307.16&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2138.77&quot; y1=&quot;307.16&quot; x2=&quot;2148.92&quot; y2=&quot;271.64&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2148.92&quot; y1=&quot;271.64&quot; x2=&quot;2158.94&quot; y2=&quot;240.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2158.94&quot; y1=&quot;240.95&quot; x2=&quot;2168.97&quot; y2=&quot;215.08&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2168.97&quot; y1=&quot;215.08&quot; x2=&quot;2178.99&quot; y2=&quot;194.42&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2178.99&quot; y1=&quot;194.42&quot; x2=&quot;2189.01&quot; y2=&quot;178.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2189.01&quot; y1=&quot;178.95&quot; x2=&quot;2199.16&quot; y2=&quot;168.80&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2199.16&quot; y1=&quot;168.80&quot; x2=&quot;2209.18&quot; y2=&quot;164.22&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2209.18&quot; y1=&quot;164.22&quot; x2=&quot;2219.21&quot; y2=&quot;165.09&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2219.21&quot; y1=&quot;165.09&quot; x2=&quot;2229.23&quot; y2=&quot;171.40&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2229.23&quot; y1=&quot;171.40&quot; x2=&quot;2239.26&quot; y2=&quot;183.16&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2239.26&quot; y1=&quot;183.16&quot; x2=&quot;2249.40&quot; y2=&quot;200.23&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2249.40&quot; y1=&quot;200.23&quot; x2=&quot;2259.43&quot; y2=&quot;222.51&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2259.43&quot; y1=&quot;222.51&quot; x2=&quot;2269.45&quot; y2=&quot;249.98&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2269.45&quot; y1=&quot;249.98&quot; x2=&quot;2279.47&quot; y2=&quot;282.28&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2279.47&quot; y1=&quot;282.28&quot; x2=&quot;2289.50&quot; y2=&quot;319.16&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2289.50&quot; y1=&quot;319.16&quot; x2=&quot;2299.65&quot; y2=&quot;360.50&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2299.65&quot; y1=&quot;360.50&quot; x2=&quot;2309.67&quot; y2=&quot;405.91&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2309.67&quot; y1=&quot;405.91&quot; x2=&quot;2319.69&quot; y2=&quot;455.29&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2319.69&quot; y1=&quot;455.29&quot; x2=&quot;2329.72&quot; y2=&quot;508.13&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2329.72&quot; y1=&quot;508.13&quot; x2=&quot;2339.74&quot; y2=&quot;564.07&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2339.74&quot; y1=&quot;564.07&quot; x2=&quot;2349.89&quot; y2=&quot;622.85&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2349.89&quot; y1=&quot;622.85&quot; x2=&quot;2359.91&quot; y2=&quot;684.11&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2359.91&quot; y1=&quot;684.11&quot; x2=&quot;2369.94&quot; y2=&quot;747.60&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2369.94&quot; y1=&quot;747.60&quot; x2=&quot;2379.96&quot; y2=&quot;812.69&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2379.96&quot; y1=&quot;812.69&quot; x2=&quot;2389.98&quot; y2=&quot;879.15&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2389.98&quot; y1=&quot;879.15&quot; x2=&quot;2400.13&quot; y2=&quot;946.59&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2400.13&quot; y1=&quot;946.59&quot; x2=&quot;2410.16&quot; y2=&quot;1014.78&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2410.16&quot; y1=&quot;1014.78&quot; x2=&quot;2420.18&quot; y2=&quot;1083.22&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2420.18&quot; y1=&quot;1083.22&quot; x2=&quot;2430.20&quot; y2=&quot;1151.65&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2430.20&quot; y1=&quot;1151.65&quot; x2=&quot;2440.23&quot; y2=&quot;1219.72&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2440.23&quot; y1=&quot;1219.72&quot; x2=&quot;2450.37&quot; y2=&quot;1287.16&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2450.37&quot; y1=&quot;1287.16&quot; x2=&quot;2460.40&quot; y2=&quot;1353.74&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2460.40&quot; y1=&quot;1353.74&quot; x2=&quot;2470.42&quot; y2=&quot;1419.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2470.42&quot; y1=&quot;1419.21&quot; x2=&quot;2480.45&quot; y2=&quot;1483.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2480.45&quot; y1=&quot;1483.19&quot; x2=&quot;2490.47&quot; y2=&quot;1545.56&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2490.47&quot; y1=&quot;1545.56&quot; x2=&quot;2500.62&quot; y2=&quot;1606.20&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2500.62&quot; y1=&quot;1606.20&quot; x2=&quot;2510.64&quot; y2=&quot;1664.86&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2510.64&quot; y1=&quot;1664.86&quot; x2=&quot;2520.66&quot; y2=&quot;1721.42&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2520.66&quot; y1=&quot;1721.42&quot; x2=&quot;2530.69&quot; y2=&quot;1775.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2530.69&quot; y1=&quot;1775.87&quot; x2=&quot;2540.71&quot; y2=&quot;1827.97&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2540.71&quot; y1=&quot;1827.97&quot; x2=&quot;2550.86&quot; y2=&quot;1877.72&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2550.86&quot; y1=&quot;1877.72&quot; x2=&quot;2560.88&quot; y2=&quot;1924.99&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2560.88&quot; y1=&quot;1924.99&quot; x2=&quot;2570.91&quot; y2=&quot;1969.91&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2570.91&quot; y1=&quot;1969.91&quot; x2=&quot;2580.93&quot; y2=&quot;2012.36&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2580.93&quot; y1=&quot;2012.36&quot; x2=&quot;2590.95&quot; y2=&quot;2052.33&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2590.95&quot; y1=&quot;2052.33&quot; x2=&quot;2601.10&quot; y2=&quot;2089.96&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2601.10&quot; y1=&quot;2089.96&quot; x2=&quot;2611.13&quot; y2=&quot;2125.23&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2611.13&quot; y1=&quot;2125.23&quot; x2=&quot;2621.15&quot; y2=&quot;2158.14&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2621.15&quot; y1=&quot;2158.14&quot; x2=&quot;2631.17&quot; y2=&quot;2188.71&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2631.17&quot; y1=&quot;2188.71&quot; x2=&quot;2641.20&quot; y2=&quot;2217.17&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2641.20&quot; y1=&quot;2217.17&quot; x2=&quot;2651.34&quot; y2=&quot;2243.53&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2651.34&quot; y1=&quot;2243.53&quot; x2=&quot;2661.37&quot; y2=&quot;2267.79&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2661.37&quot; y1=&quot;2267.79&quot; x2=&quot;2671.39&quot; y2=&quot;2290.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2671.39&quot; y1=&quot;2290.19&quot; x2=&quot;2681.41&quot; y2=&quot;2310.73&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2681.41&quot; y1=&quot;2310.73&quot; x2=&quot;2691.44&quot; y2=&quot;2329.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2691.44&quot; y1=&quot;2329.54&quot; x2=&quot;2701.46&quot; y2=&quot;2346.62&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2701.46&quot; y1=&quot;2346.62&quot; x2=&quot;2711.61&quot; y2=&quot;2362.21&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2711.61&quot; y1=&quot;2362.21&quot; x2=&quot;2721.63&quot; y2=&quot;2376.45&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2721.63&quot; y1=&quot;2376.45&quot; x2=&quot;2731.66&quot; y2=&quot;2389.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2731.66&quot; y1=&quot;2389.19&quot; x2=&quot;2741.68&quot; y2=&quot;2400.83&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2741.68&quot; y1=&quot;2400.83&quot; x2=&quot;2751.70&quot; y2=&quot;2411.22&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2751.70&quot; y1=&quot;2411.22&quot; x2=&quot;2761.85&quot; y2=&quot;2420.63&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2761.85&quot; y1=&quot;2420.63&quot; x2=&quot;2771.88&quot; y2=&quot;2428.92&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2771.88&quot; y1=&quot;2428.92&quot; x2=&quot;2781.90&quot; y2=&quot;2436.47&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2781.90&quot; y1=&quot;2436.47&quot; x2=&quot;2791.92&quot; y2=&quot;2443.15&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2791.92&quot; y1=&quot;2443.15&quot; x2=&quot;2801.95&quot; y2=&quot;2449.09&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2801.95&quot; y1=&quot;2449.09&quot; x2=&quot;2812.09&quot; y2=&quot;2454.29&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2812.09&quot; y1=&quot;2454.29&quot; x2=&quot;2822.12&quot; y2=&quot;2458.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2822.12&quot; y1=&quot;2458.87&quot; x2=&quot;2832.14&quot; y2=&quot;2462.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2832.14&quot; y1=&quot;2462.95&quot; x2=&quot;2842.17&quot; y2=&quot;2466.54&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2842.17&quot; y1=&quot;2466.54&quot; x2=&quot;2852.19&quot; y2=&quot;2469.76&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2852.19&quot; y1=&quot;2469.76&quot; x2=&quot;2862.34&quot; y2=&quot;2472.48&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2862.34&quot; y1=&quot;2472.48&quot; x2=&quot;2872.36&quot; y2=&quot;2474.83&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2872.36&quot; y1=&quot;2474.83&quot; x2=&quot;2882.39&quot; y2=&quot;2476.93&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2882.39&quot; y1=&quot;2476.93&quot; x2=&quot;2892.41&quot; y2=&quot;2478.79&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2892.41&quot; y1=&quot;2478.79&quot; x2=&quot;2902.43&quot; y2=&quot;2480.28&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2902.43&quot; y1=&quot;2480.28&quot; x2=&quot;2912.58&quot; y2=&quot;2481.64&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2912.58&quot; y1=&quot;2481.64&quot; x2=&quot;2922.60&quot; y2=&quot;2482.87&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2922.60&quot; y1=&quot;2482.87&quot; x2=&quot;2932.63&quot; y2=&quot;2483.86&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2932.63&quot; y1=&quot;2483.86&quot; x2=&quot;2942.65&quot; y2=&quot;2484.61&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2942.65&quot; y1=&quot;2484.61&quot; x2=&quot;2952.68&quot; y2=&quot;2485.35&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2952.68&quot; y1=&quot;2485.35&quot; x2=&quot;2962.82&quot; y2=&quot;2485.97&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2962.82&quot; y1=&quot;2485.97&quot; x2=&quot;2972.85&quot; y2=&quot;2486.59&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2972.85&quot; y1=&quot;2486.59&quot; x2=&quot;2982.87&quot; y2=&quot;2486.96&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2982.87&quot; y1=&quot;2486.96&quot; x2=&quot;2992.89&quot; y2=&quot;2487.33&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;2992.89&quot; y1=&quot;2487.33&quot; x2=&quot;3002.92&quot; y2=&quot;2487.70&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3002.92&quot; y1=&quot;2487.70&quot; x2=&quot;3013.07&quot; y2=&quot;2487.95&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3013.07&quot; y1=&quot;2487.95&quot; x2=&quot;3023.09&quot; y2=&quot;2488.20&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3023.09&quot; y1=&quot;2488.20&quot; x2=&quot;3033.11&quot; y2=&quot;2488.32&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3033.11&quot; y1=&quot;2488.32&quot; x2=&quot;3043.14&quot; y2=&quot;2488.57&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3043.14&quot; y1=&quot;2488.57&quot; x2=&quot;3053.16&quot; y2=&quot;2488.69&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3053.16&quot; y1=&quot;2488.69&quot; x2=&quot;3063.31&quot; y2=&quot;2488.81&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3063.31&quot; y1=&quot;2488.81&quot; x2=&quot;3073.33&quot; y2=&quot;2488.81&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3073.33&quot; y1=&quot;2488.81&quot; x2=&quot;3083.36&quot; y2=&quot;2488.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3083.36&quot; y1=&quot;2488.94&quot; x2=&quot;3093.38&quot; y2=&quot;2488.94&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3093.38&quot; y1=&quot;2488.94&quot; x2=&quot;3103.40&quot; y2=&quot;2489.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3103.40&quot; y1=&quot;2489.06&quot; x2=&quot;3113.55&quot; y2=&quot;2489.06&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3113.55&quot; y1=&quot;2489.06&quot; x2=&quot;3123.57&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3123.57&quot; y1=&quot;2489.19&quot; x2=&quot;3133.60&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3133.60&quot; y1=&quot;2489.19&quot; x2=&quot;3143.62&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3143.62&quot; y1=&quot;2489.19&quot; x2=&quot;3153.64&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3153.64&quot; y1=&quot;2489.19&quot; x2=&quot;3163.79&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3163.79&quot; y1=&quot;2489.19&quot; x2=&quot;3173.82&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3173.82&quot; y1=&quot;2489.19&quot; x2=&quot;3183.84&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3183.84&quot; y1=&quot;2489.19&quot; x2=&quot;3193.86&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3193.86&quot; y1=&quot;2489.19&quot; x2=&quot;3203.89&quot; y2=&quot;2489.19&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3203.89&quot; y1=&quot;2489.19&quot; x2=&quot;3214.03&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3214.03&quot; y1=&quot;2489.31&quot; x2=&quot;3224.06&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3224.06&quot; y1=&quot;2489.31&quot; x2=&quot;3234.08&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3234.08&quot; y1=&quot;2489.31&quot; x2=&quot;3244.11&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3244.11&quot; y1=&quot;2489.31&quot; x2=&quot;3254.13&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3254.13&quot; y1=&quot;2489.31&quot; x2=&quot;3264.15&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3264.15&quot; y1=&quot;2489.31&quot; x2=&quot;3274.30&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3274.30&quot; y1=&quot;2489.31&quot; x2=&quot;3284.32&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3284.32&quot; y1=&quot;2489.31&quot; x2=&quot;3294.35&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3294.35&quot; y1=&quot;2489.31&quot; x2=&quot;3304.37&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3304.37&quot; y1=&quot;2489.31&quot; x2=&quot;3314.40&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3314.40&quot; y1=&quot;2489.31&quot; x2=&quot;3324.54&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3324.54&quot; y1=&quot;2489.31&quot; x2=&quot;3334.57&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3334.57&quot; y1=&quot;2489.31&quot; x2=&quot;3344.59&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3344.59&quot; y1=&quot;2489.31&quot; x2=&quot;3354.61&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3354.61&quot; y1=&quot;2489.31&quot; x2=&quot;3364.64&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3364.64&quot; y1=&quot;2489.31&quot; x2=&quot;3374.79&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3374.79&quot; y1=&quot;2489.31&quot; x2=&quot;3384.81&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3384.81&quot; y1=&quot;2489.31&quot; x2=&quot;3394.83&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3394.83&quot; y1=&quot;2489.31&quot; x2=&quot;3404.86&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3404.86&quot; y1=&quot;2489.31&quot; x2=&quot;3414.88&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3414.88&quot; y1=&quot;2489.31&quot; x2=&quot;3425.03&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3425.03&quot; y1=&quot;2489.31&quot; x2=&quot;3435.05&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3435.05&quot; y1=&quot;2489.31&quot; x2=&quot;3445.08&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3445.08&quot; y1=&quot;2489.31&quot; x2=&quot;3455.10&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3455.10&quot; y1=&quot;2489.31&quot; x2=&quot;3465.12&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3465.12&quot; y1=&quot;2489.31&quot; x2=&quot;3475.27&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;3475.27&quot; y1=&quot;2489.31&quot; x2=&quot;3485.30&quot; y2=&quot;2489.31&quot; stroke-linecap=&quot;round&quot; style=&quot;stroke:#2D6D66;stroke-width:8.64&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;390.80&quot; y2=&quot;100.86&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;350.83&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;2489.19&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2489.19)&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2035.75&quot; x2=&quot;350.83&quot; y2=&quot;2035.75&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;2035.75&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,2035.75)&quot; text-anchor=&quot;middle&quot;&gt;.05&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1582.44&quot; x2=&quot;350.83&quot; y2=&quot;1582.44&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;1582.44&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1582.44)&quot; text-anchor=&quot;middle&quot;&gt;.1&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;1129.01&quot; x2=&quot;350.83&quot; y2=&quot;1129.01&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;1129.01&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,1129.01)&quot; text-anchor=&quot;middle&quot;&gt;.15&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;675.57&quot; x2=&quot;350.83&quot; y2=&quot;675.57&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;675.57&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,675.57)&quot; text-anchor=&quot;middle&quot;&gt;.2&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;222.14&quot; x2=&quot;350.83&quot; y2=&quot;222.14&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;300.72&quot; y=&quot;222.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 300.72,222.14)&quot; text-anchor=&quot;middle&quot;&gt;.25&lt;/text&gt;
+    &lt;text x=&quot;190.71&quot; y=&quot;1294.96&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; transform=&quot;rotate(-90 190.71,1294.96)&quot; text-anchor=&quot;middle&quot;&gt;Density&lt;/text&gt;
+    &lt;line x1=&quot;390.80&quot; y1=&quot;2489.19&quot; x2=&quot;3859.02&quot; y2=&quot;2489.19&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;line x1=&quot;470.75&quot; y1=&quot;2489.19&quot; x2=&quot;470.75&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;470.75&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;-5&lt;/text&gt;
+    &lt;line x1=&quot;1135.78&quot; y1=&quot;2489.19&quot; x2=&quot;1135.78&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;1135.78&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;0&lt;/text&gt;
+    &lt;line x1=&quot;1800.81&quot; y1=&quot;2489.19&quot; x2=&quot;1800.81&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;1800.81&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;5&lt;/text&gt;
+    &lt;line x1=&quot;2465.72&quot; y1=&quot;2489.19&quot; x2=&quot;2465.72&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;2465.72&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;10&lt;/text&gt;
+    &lt;line x1=&quot;3130.75&quot; y1=&quot;2489.19&quot; x2=&quot;3130.75&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;3130.75&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;15&lt;/text&gt;
+    &lt;line x1=&quot;3795.66&quot; y1=&quot;2489.19&quot; x2=&quot;3795.66&quot; y2=&quot;2529.16&quot; style=&quot;stroke:#000000;stroke-width:5.76&quot;/&gt;
+    &lt;text x=&quot;3795.66&quot; y=&quot;2619.14&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;20&lt;/text&gt;
+    &lt;text x=&quot;2124.91&quot; y=&quot;2729.16&quot; style=&quot;font-family:&#x27;Helvetica&#x27;;font-size:99.99px;fill:#000000&quot; text-anchor=&quot;middle&quot;&gt;log of totalmedicarepaymentamount&lt;/text&gt;
+&lt;/svg&gt;
+</body></html>"></iframe></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">restore</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Question-3">
+<h3>Question 3<a class="headerlink" href="#Question-3" title="Permalink to this headline">¶</a></h3>
+<p>We have to find the HCPCS codes that correspond to Home base medical care services in order to identify them. HCPCS stands for Healthcare Common Procedure Coding System.</p>
+<p>They are used for billing Medicare &amp; Medicaid patients — The Healthcare Common Prodecure Coding System (HCPCS) is a collection of codes that represent procedures, supplies, products and services which may be provided to Medicare beneficiaries and to individuals enrolled in private health insurance programs. HCPCS codes primarily correspond to services, procedures, and equipment not covered by CPT® codes. This includes durable medical equipment (DME), prosthetics, ambulance rides, and certain
+drugs and medicines. Source 1: <a class="reference external" href="https://hcpcs.codes/">https://hcpcs.codes/</a></p>
+<p>We found this page that lists the HCPCS codes that refer to home based medical care services. Source 2: <a class="reference external" href="https://www.lilesparker.com/2017/06/20/audits-medicare-em-home-services/">https://www.lilesparker.com/2017/06/20/audits-medicare-em-home-services/</a></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">gen</span> hbmc = hcpcscode <span class="o">==</span> <span class="s">&quot;99341&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99342&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99343&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99344&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99345&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;93347&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99348&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99349&quot;</span> | <span class="cs">///</span>
+hcpcscode <span class="o">==</span> <span class="s">&quot;99350&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">tab</span> hbmc
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+       hbmc |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |    948,260       99.84       99.84
+          1 |      1,529        0.16      100.00
+------------+-----------------------------------
+      Total |    949,789      100.00
+</pre></div></div>
+</div>
+<p>Let us see how many providers provided home based medicare care.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">codebook</span> nationalprovideridentifier<span class="k"> if</span> hbmc <span class="o">==</span> <span class="m">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+nationalprovideridentifier                                                                                                                                                   National Provider Identifier
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                  type:  numeric (long)
+
+                 range:  [1.003e+09,1.993e+09]        units:  1
+         unique values:  1,417                    missing .:  0/1,529
+
+                  mean:   1.5e+09
+              std. dev:   2.9e+08
+
+           percentiles:        10%       25%       50%       75%       90%
+                           1.1e+09   1.3e+09   1.5e+09   1.7e+09   1.9e+09
+</pre></div></div>
+</div>
+<p>1,417 providers</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="Cleaning.html" class="btn btn-neutral float-left" title="Cleaning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jeremy J. Sze; Jaison Moreno; Omari-Khalid Rahman; Mohammed Husain
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
