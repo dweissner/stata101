@@ -1,2 +1,2 @@
-# stata
-From raw data to analytical file
+# Stata
+How to go from raw data to a dataset ready for analysis
