@@ -1,0 +1,27 @@
+/*Lets Talk about egen.
+The egen command is a great tool to use because of its broad functionality.
+Q. What does egen do?
+A. Egen is the older brother of the gen command, meaning that it can do different
+things depending on what subcommands are specified. 
+
+Let's start simple */
+
+webuse auto.dta, replace
+//What is "webuse", webuse opens a stata preloaded dataset from the internet.
+
+describe
+//describe gives a basic overview fo the variables. Names, labels, type. 
+
+egen rank_wgt=rank(weight)
+sum rank_wgt
+/*here we have ranked the weight of each car. The cars that weigh the same 
+are half values. */
+
+bysort foreign: egen max_len=max(length)
+/* now we can also see the max length for each group, foreign and domestic. 
+Bysort is used to order and seperate the two groups and basically treat them as 
+independent groups where you are finding the maximum length for each group. */
+
+gen diff_len=max_len-length
+/*we can also generate the difference in length between each car and the largest 
+length car within the foreign or domestic group */
