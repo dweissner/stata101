@@ -1,0 +1,1222 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Do I need to clean my data? &mdash; Stata 101 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Physician and Other Supplier Data" href="Medicare PUF.html" />
+    <link rel="prev" title="Cleaning" href="Cleaning.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Stata 101
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Install.html#User-written-files">User written files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Install.html#About-SSC">About SSC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Import.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cleaning.html">Cleaning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Do I need to clean my data?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Medicare PUF.html">Physician and Other Supplier Data</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Stata 101</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Do I need to clean my data?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Stata-whyclean.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Do-I-need-to-clean-my-data?">
+<h1>Do I need to clean my data?<a class="headerlink" href="#Do-I-need-to-clean-my-data?" title="Permalink to this headline">¶</a></h1>
+<p>The short answer is <strong>always</strong> assume your data needs to be cleaned. Data collection is rarely perfect, and even if the data is collected perfectly there are multiple points in the data pipeline where errors can be introduced. Data errors can be catastrophic for a myriad of reasons; modern analytic methods require data to confirm to certain standards for your analysis to be valid, and in some cases regression models will not run if your data is not properly cleaned. For the purposes of this
+demonstration I will be using the 2003 Stop, Question and Frisk dataset from the <a class="reference external" href="https://www1.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page">NYPD</a>. I also recommend downloading the data dictionary from <a class="reference external" href="https://data.cityofnewyork.us/api/views/ftxv-d5ix/files/9cecce6d-baca-4a60-be9d-31501b5639f0?download=true&amp;filename=2016-sqf-file-spec.xlsx">here</a>.</p>
+<p>Because the data is not in stata format (<a href="#id1"><span class="problematic" id="id2">*</span></a>.dta), we must import it into stata using the <code class="docutils literal notranslate"><span class="pre">import</span></code> command. In this case we will be using <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">delimited</span></code> because the data is in text format with a delimiter. A delimiter separates values in your dataset. The most common type of delimiter is a comma, and files stored in this format usually end in .csv, which stands for comma separated values</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span>import delimited <span class="o">/</span>home<span class="o">/</span>omari<span class="o">/</span>Downloads<span class="o">/</span><span class="m">2003.</span>csv,<span class="k"> clear</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(111 vars, 160,851 obs)
+</pre></div></div>
+</div>
+<p>Before proceeding to clean your data, it is often useful to look at metadata. Metadata is simply data that describes your data, and is usually available for public use datasets. The most common forms of metadata you’ll encounter are data dictionaries and codebooks. See a detailed description of codebooks <a class="reference external" href="https://www.icpsr.umich.edu/icpsrweb/content/shared/ICPSR/faqs/what-is-a-codebook.html">here</a>. Data dictonaries are much leaner than codebooks, and focus primarily on providing information
+about data formats.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="cm">/* This is a Stata comment. It allows us to write notes in our code that Stata will not execute.</span>
+<span class="cm">If we do not specify it as a comment, Stata will attempt run our notes as code and will return a syntax error.</span>
+<span class="cm">Multi line comments must be enclosed between /* ... */ */</span>
+
+<span class="c1">// Alternatively, single line comments only require // and don&#39;t need to be enclosed.</span>
+
+<span class="c1">// describe lists all variables in our datasets and gives information about their storage type</span>
+<span class="k">describe</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Contains data
+  obs:       160,851
+ vars:           111
+ size:    58,388,913
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+year            int     %8.0g
+pct             int     %8.0g
+ser_num         long    %12.0g
+datestop        long    %12.0g
+timestop        str5    %9s
+recstat         str1    %9s
+inout           str1    %9s
+trhsloc         str1    %9s
+perobs          int     %8.0g
+crimsusp        str30   %30s
+perstop         int     %8.0g
+typeofid        str1    %9s
+explnstp        str1    %9s
+othpers         str1    %9s
+arstmade        str1    %9s
+arstoffn        str30   %30s
+sumissue        str1    %9s
+sumoffen        str30   %30s
+compyear        byte    %8.0g
+comppct         byte    %8.0g
+offunif         str1    %9s
+officrid        str1    %9s
+frisked         str1    %9s
+searched        str1    %9s
+contrabn        str1    %9s
+adtlrept        str1    %9s
+pistol          str1    %9s
+riflshot        str1    %9s
+asltweap        str1    %9s
+knifcuti        str1    %9s
+machgun         str1    %9s
+othrweap        str1    %9s
+pf_hands        str1    %9s
+pf_wall         str1    %9s
+pf_grnd         str1    %9s
+pf_drwep        str1    %9s
+pf_ptwep        str1    %9s
+pf_baton        str1    %9s
+pf_hcuff        str1    %9s
+pf_pepsp        str1    %9s
+pf_other        str1    %9s
+radio           str1    %9s
+ac_rept         str1    %9s
+ac_inves        str1    %9s
+rf_vcrim        str1    %9s
+rf_othsw        str1    %9s
+ac_proxm        str1    %9s
+rf_attir        str1    %9s
+cs_objcs        str1    %9s
+cs_descr        str1    %9s
+cs_casng        str1    %9s
+cs_lkout        str1    %9s
+rf_vcact        str1    %9s
+cs_cloth        str1    %9s
+cs_drgtr        str1    %9s
+ac_evasv        str1    %9s
+ac_assoc        str1    %9s
+cs_furtv        str1    %9s
+rf_rfcmp        str1    %9s
+ac_cgdir        str1    %9s
+rf_verbl        str1    %9s
+cs_vcrim        str1    %9s
+cs_bulge        str1    %9s
+cs_other        str1    %9s
+ac_incid        str1    %9s
+ac_time         str1    %9s
+rf_knowl        str1    %9s
+ac_stsnd        str1    %9s
+ac_other        str1    %9s
+sb_hdobj        str1    %9s
+sb_outln        str1    %9s
+sb_admis        str1    %9s
+sb_other        str1    %9s
+repcmd          str4    %9s
+revcmd          str4    %9s
+rf_furt         str1    %9s
+rf_bulg         str1    %9s
+offverb         str1    %9s
+offshld         str1    %9s
+sex             str1    %9s
+race            str1    %9s
+dob             str8    %9s
+age             str4    %9s
+ht_feet         str1    %9s
+ht_inch         str2    %9s
+weight          str5    %9s
+haircolr        str2    %9s
+eyecolor        str2    %9s
+build           str1    %9s
+othfeatr        str1    %9s
+addrtyp         str1    %9s
+--more--
+</pre></div></div>
+</div>
+<p>The two most frequent types of variables you’ll encounter in Stata are character and numeric. Numeric variables can be stored as <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">byte</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">long</span></code> and <code class="docutils literal notranslate"><span class="pre">double</span></code>; character variables are stored as <code class="docutils literal notranslate"><span class="pre">str</span></code> (strings). The number at the end of <code class="docutils literal notranslate"><span class="pre">str</span></code> gives the width of the string, which is the maximum number of characters the string can hold. An important part of data cleaning is ensuring your variables are in the right format.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="cm">/* The describe command from earlier can take variables as arguments. */</span><span class="k"></span>
+<span class="k">describe</span> age
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+age             str4    %9s
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> age
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         age |          0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">tab</span> age
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+        age |      Freq.     Percent        Cum.
+------------+-----------------------------------
+            |        162        0.10        0.10
+          0 |      6,349        3.95        4.05
+          1 |        168        0.10        4.15
+         10 |         42        0.03        4.18
+        103 |          1        0.00        4.18
+         11 |         61        0.04        4.22
+        110 |          1        0.00        4.22
+        113 |          1        0.00        4.22
+        114 |          1        0.00        4.22
+        115 |          1        0.00        4.22
+         12 |        268        0.17        4.39
+        120 |          5        0.00        4.39
+        121 |          1        0.00        4.39
+       1271 |          1        0.00        4.39
+         13 |        811        0.50        4.89
+        130 |          7        0.00        4.90
+       1316 |          1        0.00        4.90
+        132 |          1        0.00        4.90
+        135 |          3        0.00        4.90
+         14 |      2,383        1.48        6.38
+        140 |         13        0.01        6.39
+        145 |          6        0.00        6.40
+        147 |          1        0.00        6.40
+        148 |          1        0.00        6.40
+        149 |          2        0.00        6.40
+         15 |      4,893        3.04        9.44
+        150 |         12        0.01        9.45
+        154 |          1        0.00        9.45
+        155 |          5        0.00        9.45
+        156 |          1        0.00        9.45
+        157 |          1        0.00        9.45
+        158 |          1        0.00        9.45
+         16 |      7,340        4.56       14.02
+        160 |         10        0.01       14.02
+        165 |         10        0.01       14.03
+       1655 |          1        0.00       14.03
+        169 |          1        0.00       14.03
+         17 |      9,063        5.63       19.66
+        170 |          8        0.00       19.67
+       1742 |          1        0.00       19.67
+        175 |          3        0.00       19.67
+         18 |     10,175        6.33       26.00
+        180 |         11        0.01       26.00
+        181 |          1        0.00       26.00
+        185 |          7        0.00       26.01
+        187 |          2        0.00       26.01
+        189 |          5        0.00       26.01
+         19 |      9,677        6.02       32.03
+        190 |          9        0.01       32.04
+        195 |          4        0.00       32.04
+        196 |          1        0.00       32.04
+        198 |          2        0.00       32.04
+          2 |         37        0.02       32.06
+         20 |     11,168        6.94       39.01
+        200 |          4        0.00       39.01
+        205 |          6        0.00       39.01
+        206 |          3        0.00       39.01
+         21 |      7,727        4.80       43.82
+        210 |          4        0.00       43.82
+        213 |          3        0.00       43.82
+        214 |          2        0.00       43.82
+        215 |          1        0.00       43.82
+        219 |          1        0.00       43.82
+         22 |      8,182        5.09       48.91
+        220 |          5        0.00       48.91
+        221 |          2        0.00       48.92
+        222 |          2        0.00       48.92
+        223 |          3        0.00       48.92
+        224 |          2        0.00       48.92
+        225 |          1        0.00       48.92
+         23 |      7,487        4.65       53.58
+        230 |          3        0.00       53.58
+        232 |          1        0.00       53.58
+        235 |          2        0.00       53.58
+        236 |          1        0.00       53.58
+        239 |          1        0.00       53.58
+         24 |      5,404        3.36       56.94
+        240 |          3        0.00       56.94
+        241 |          1        0.00       56.94
+        244 |          1        0.00       56.94
+        245 |          1        0.00       56.94
+        247 |          3        0.00       56.95
+         25 |      5,988        3.72       60.67
+        250 |          1        0.00       60.67
+        254 |          1        0.00       60.67
+        255 |          1        0.00       60.67
+        258 |          1        0.00       60.67
+         26 |      4,223        2.63       63.30
+        265 |          1        0.00       63.30
+        269 |          2        0.00       63.30
+         27 |      3,834        2.38       65.68
+        270 |          2        0.00       65.68
+         28 |      3,499        2.18       67.86
+        280 |          3        0.00       67.86
+        285 |          1        0.00       67.86
+        287 |          2        0.00       67.86
+         29 |      2,965        1.84       69.70
+--more--
+</pre></div></div>
+</div>
+<p>Stata returns 0 observations when we try to calculate the mean and standard deviation of age using the <code class="docutils literal notranslate"><span class="pre">sum</span></code> (summarize) command, However, when we <code class="docutils literal notranslate"><span class="pre">tab</span></code> (tabulate) it shows us a range of values and more than 0 observations. This is because age is stored as a string variable, and we are unable to perform arithmetic operations on string variables. In order for us to include age in our analysis, we must convert it to a numeric variable. As we saw earlier, there are multiple formats for
+numerical variables, so which format should we convert age to? <code class="docutils literal notranslate"><span class="pre">byte</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, and <code class="docutils literal notranslate"><span class="pre">long</span></code> can only store integers (whole numbers), whereas <code class="docutils literal notranslate"><span class="pre">float</span></code> and <code class="docutils literal notranslate"><span class="pre">double</span></code> can store both integers and decimals. <code class="docutils literal notranslate"><span class="pre">float</span></code> and <code class="docutils literal notranslate"><span class="pre">double</span></code> consume more memory to store information, so it is not computationally efficient to store a whole numbers as a <code class="docutils literal notranslate"><span class="pre">float</span></code>. See this Stata <a class="reference external" href="https://www.stata.com/manuals13/ddatatypes.pdf">help file</a> for more information. To determine what numeric format we should
+convert age to we must first examine the values of age.</p>
+<p>We see that all the values of age are whole numbers, so we should not convert it to a <code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">double</span></code>. There are also values of age that exceeds 100, so it cannot be stored as a <code class="docutils literal notranslate"><span class="pre">byte</span></code>. Logically, it makes sense to store it as an integer. We’ll do so using the <code class="docutils literal notranslate"><span class="pre">destring</span></code> command.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">destring</span> age,<span class="k"> gen</span>(age_cleaned)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+age: all characters numeric; age_cleaned generated as int
+(162 missing values generated)
+</pre></div></div>
+</div>
+<p>Byte can only store a maximum value of 100, and we can see from the frequency table that there are values of age that exceed 100. Because of this Stata choses to convert age to <code class="docutils literal notranslate"><span class="pre">int</span></code>, and our optional argument <code class="docutils literal notranslate"><span class="pre">gen()</span></code> creates a new variable (or column). Stata stores all datasets as 2-dimensional arrays; variables are stored as columns and observations are stored as rows. Alternatively, we could have specified <code class="docutils literal notranslate"><span class="pre">replace</span></code> in lieu of <code class="docutils literal notranslate"><span class="pre">gen()</span></code> and Stata would have overwritten our age column
+instead of creating a new one. This option is risky and should be used with caution. Another thing you may have noticed is that Stata created 162 missing values. This is the result of Stata converting an empty string to a numeric value. The first row of our frequency table shows 162 people with no values for age.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> age_cleaned
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ age_cleaned |    160,689    31.76657    225.3125          0       9999
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> age_cleaned,<span class="k"> d</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+                         age_cleaned
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%           14              0
+10%           16              0       Obs             160,689
+25%           18              0       Sum of Wgt.     160,689
+
+50%           23                      Mean           31.76657
+                        Largest       Std. Dev.      225.3125
+75%           32           9999
+90%           43           9999       Variance       50765.73
+95%           49           9999       Skewness       43.67801
+99%           72           9999       Kurtosis       1930.646
+</pre></div></div>
+</div>
+<p>We’re now able to calculate the mean of age using our “cleaned” age variable. However our detailed summary (that’s what the <code class="docutils literal notranslate"><span class="pre">,</span> <span class="pre">d</span></code> stands for) shows that we have rather unrealistic values of age, such as 9999. The most straightforward way to deal with unrealistic values of a variable is to replaced them as missing, thus removing the values from our analysis and preventing them from potentially skewing our results. While this may be the most straightforward way, it is often the least desirable
+way due to the loss of observations.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">replace</span> age_cleaned = .<span class="k"> if</span> age_cleaned<span class="o">&gt;</span><span class="m">100</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(405 real changes made, 405 to missing)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> age_cleaned,<span class="k"> d</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+                         age_cleaned
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%           14              0
+10%           16              0       Obs             160,284
+25%           18              0       Sum of Wgt.     160,284
+
+50%           23                      Mean           26.01252
+                        Largest       Std. Dev.       12.9699
+75%           32             99
+90%           42             99       Variance       168.2183
+95%           49             99       Skewness        1.52006
+99%           64             99       Kurtosis       8.901667
+</pre></div></div>
+</div>
+<p>We now see that the mean value of age is slightly lower, and the standard deviation is much smaller. Given the extremely small number of observations that are lost due to converting the extreme values to missing (405 out of 160,851), it may be sufficient to simply leave the values as missing. However if we were to lose more substantial amounts of observations by converting the extreme values to missing, it would be necessary to exlpore ways to impute those missing values with a more realistic
+number. Imputing the mean value is a popular choice. There are also statistical methods that can be used to impute missing values by way of predictive modeling. The latter is much more advanced than this tutorial aims to be, so we’ll resort to the former.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">return list</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+scalars:
+                r(p99) =  64
+                r(p95) =  49
+                r(p90) =  42
+                r(p75) =  32
+                r(p50) =  23
+                r(p25) =  18
+                r(p10) =  16
+                 r(p5) =  14
+                 r(p1) =  0
+                r(max) =  99
+                r(min) =  0
+                r(sum) =  4169391
+           r(kurtosis) =  8.901666570994999
+           r(skewness) =  1.520059538798137
+                 r(sd) =  12.96990027108677
+                r(Var) =  168.2183130419367
+               r(mean) =  26.01252152429438
+              r(sum_w) =  160284
+                  r(N) =  160284
+</pre></div></div>
+</div>
+<p>Stata stores the results of most of its computational commands in temporary scalars/vectors/matrices that can be viewed with <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">list</span></code>. It is temporary because the next computational command will overwrite the current content of <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">list</span></code>, and all content is lost when Stata is closed.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">replace</span> age_cleaned = <span class="nf">r</span>(mean)<span class="k"> if</span> age_cleaned<span class="o">==</span>.
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+variable age_cleaned was int now float
+(567 real changes made)
+</pre></div></div>
+</div>
+<p>We’ ve now replaced the 405 missing values we created in our previous step, as well as the 162 missing values that were already by imputing the mean value.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">sum</span> age_cleaned,<span class="k"> d</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+                         age_cleaned
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%           14              0
+10%           16              0       Obs             160,851
+25%           18              0       Sum of Wgt.     160,851
+
+50%           23                      Mean           26.01252
+                        Largest       Std. Dev.      12.94702
+75%           32             99
+90%           42             99       Variance       167.6253
+95%           48             99       Skewness       1.522746
+99%           64             99       Kurtosis       8.933156
+</pre></div></div>
+</div>
+<p>Because r(mean) was a float (had decimal places), it changed our age_cleaned from int to float. In order to return to integer, we can use the <code class="docutils literal notranslate"><span class="pre">recast</span></code> command which will truncate all floats and keep only the numbers to the left of the decimal. Note, truncation does not round up or round down. It only returns numbers to the left of the decimal.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">tab</span> age_cleaned
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+age_cleaned |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,349        3.95        3.95
+          1 |        168        0.10        4.05
+          2 |         37        0.02        4.07
+          3 |         23        0.01        4.09
+          4 |         12        0.01        4.10
+          5 |         83        0.05        4.15
+          6 |         21        0.01        4.16
+          7 |          5        0.00        4.16
+          8 |          3        0.00        4.17
+          9 |          5        0.00        4.17
+         10 |         42        0.03        4.20
+         11 |         61        0.04        4.23
+         12 |        268        0.17        4.40
+         13 |        811        0.50        4.90
+         14 |      2,383        1.48        6.39
+         15 |      4,893        3.04        9.43
+         16 |      7,340        4.56       13.99
+         17 |      9,063        5.63       19.62
+         18 |     10,175        6.33       25.95
+         19 |      9,677        6.02       31.97
+         20 |     11,168        6.94       38.91
+         21 |      7,727        4.80       43.71
+         22 |      8,182        5.09       48.80
+         23 |      7,487        4.65       53.46
+         24 |      5,404        3.36       56.81
+         25 |      5,988        3.72       60.54
+         26 |      4,223        2.63       63.16
+   26.01252 |        567        0.35       63.52
+         27 |      3,834        2.38       65.90
+         28 |      3,499        2.18       68.07
+         29 |      2,965        1.84       69.92
+         30 |      3,781        2.35       72.27
+         31 |      2,577        1.60       73.87
+         32 |      2,891        1.80       75.67
+         33 |      2,870        1.78       77.45
+         34 |      2,405        1.50       78.95
+         35 |      2,774        1.72       80.67
+         36 |      2,149        1.34       82.01
+         37 |      2,187        1.36       83.37
+         38 |      2,157        1.34       84.71
+         39 |      2,151        1.34       86.05
+         40 |      2,620        1.63       87.67
+         41 |      1,776        1.10       88.78
+         42 |      2,081        1.29       90.07
+         43 |      1,868        1.16       91.23
+         44 |      1,374        0.85       92.09
+         45 |      1,530        0.95       93.04
+         46 |      1,143        0.71       93.75
+         47 |      1,086        0.68       94.42
+         48 |        945        0.59       95.01
+         49 |        814        0.51       95.52
+         50 |        873        0.54       96.06
+         51 |        585        0.36       96.42
+         52 |        705        0.44       96.86
+         53 |        638        0.40       97.26
+         54 |        429        0.27       97.53
+         55 |        536        0.33       97.86
+         56 |        328        0.20       98.06
+         57 |        308        0.19       98.25
+         58 |        265        0.16       98.42
+         59 |        225        0.14       98.56
+         60 |        233        0.14       98.70
+         61 |        134        0.08       98.79
+         62 |        170        0.11       98.89
+         63 |        131        0.08       98.97
+         64 |         76        0.05       99.02
+         65 |         90        0.06       99.08
+         66 |         57        0.04       99.11
+         67 |         53        0.03       99.15
+         68 |         39        0.02       99.17
+         69 |         39        0.02       99.19
+         70 |         48        0.03       99.22
+         71 |         27        0.02       99.24
+         72 |         31        0.02       99.26
+         73 |         32        0.02       99.28
+         74 |         21        0.01       99.29
+         75 |         32        0.02       99.31
+         76 |         15        0.01       99.32
+         77 |         19        0.01       99.33
+         78 |         12        0.01       99.34
+         79 |          9        0.01       99.35
+         80 |          5        0.00       99.35
+         81 |          7        0.00       99.36
+         82 |          6        0.00       99.36
+         83 |          7        0.00       99.36
+         84 |          1        0.00       99.36
+         85 |          3        0.00       99.37
+         86 |          1        0.00       99.37
+         88 |          6        0.00       99.37
+         90 |          5        0.00       99.37
+         91 |          2        0.00       99.37
+         92 |          2        0.00       99.38
+         93 |          1        0.00       99.38
+         94 |          3        0.00       99.38
+         95 |          4        0.00       99.38
+         97 |          2        0.00       99.38
+         99 |        994        0.62      100.00
+--more--
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">recast</span> int age_cleaned
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+age_cleaned:  567 values would be changed; not changed
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">recast</span></code> produces an error because Stata does not want to truncate your floats. You can override this with the optional argument <code class="docutils literal notranslate"><span class="pre">force</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">recast</span> int age_cleaned, force
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+age_cleaned:  567 values changed
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-stata notranslate"><div class="highlight"><pre>
+<span></span><span class="k">tab</span> age_cleaned
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+age_cleaned |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,349        3.95        3.95
+          1 |        168        0.10        4.05
+          2 |         37        0.02        4.07
+          3 |         23        0.01        4.09
+          4 |         12        0.01        4.10
+          5 |         83        0.05        4.15
+          6 |         21        0.01        4.16
+          7 |          5        0.00        4.16
+          8 |          3        0.00        4.17
+          9 |          5        0.00        4.17
+         10 |         42        0.03        4.20
+         11 |         61        0.04        4.23
+         12 |        268        0.17        4.40
+         13 |        811        0.50        4.90
+         14 |      2,383        1.48        6.39
+         15 |      4,893        3.04        9.43
+         16 |      7,340        4.56       13.99
+         17 |      9,063        5.63       19.62
+         18 |     10,175        6.33       25.95
+         19 |      9,677        6.02       31.97
+         20 |     11,168        6.94       38.91
+         21 |      7,727        4.80       43.71
+         22 |      8,182        5.09       48.80
+         23 |      7,487        4.65       53.46
+         24 |      5,404        3.36       56.81
+         25 |      5,988        3.72       60.54
+         26 |      4,790        2.98       63.52
+         27 |      3,834        2.38       65.90
+         28 |      3,499        2.18       68.07
+         29 |      2,965        1.84       69.92
+         30 |      3,781        2.35       72.27
+         31 |      2,577        1.60       73.87
+         32 |      2,891        1.80       75.67
+         33 |      2,870        1.78       77.45
+         34 |      2,405        1.50       78.95
+         35 |      2,774        1.72       80.67
+         36 |      2,149        1.34       82.01
+         37 |      2,187        1.36       83.37
+         38 |      2,157        1.34       84.71
+         39 |      2,151        1.34       86.05
+         40 |      2,620        1.63       87.67
+         41 |      1,776        1.10       88.78
+         42 |      2,081        1.29       90.07
+         43 |      1,868        1.16       91.23
+         44 |      1,374        0.85       92.09
+         45 |      1,530        0.95       93.04
+         46 |      1,143        0.71       93.75
+         47 |      1,086        0.68       94.42
+         48 |        945        0.59       95.01
+         49 |        814        0.51       95.52
+         50 |        873        0.54       96.06
+         51 |        585        0.36       96.42
+         52 |        705        0.44       96.86
+         53 |        638        0.40       97.26
+         54 |        429        0.27       97.53
+         55 |        536        0.33       97.86
+         56 |        328        0.20       98.06
+         57 |        308        0.19       98.25
+         58 |        265        0.16       98.42
+         59 |        225        0.14       98.56
+         60 |        233        0.14       98.70
+         61 |        134        0.08       98.79
+         62 |        170        0.11       98.89
+         63 |        131        0.08       98.97
+         64 |         76        0.05       99.02
+         65 |         90        0.06       99.08
+         66 |         57        0.04       99.11
+         67 |         53        0.03       99.15
+         68 |         39        0.02       99.17
+         69 |         39        0.02       99.19
+         70 |         48        0.03       99.22
+         71 |         27        0.02       99.24
+         72 |         31        0.02       99.26
+         73 |         32        0.02       99.28
+         74 |         21        0.01       99.29
+         75 |         32        0.02       99.31
+         76 |         15        0.01       99.32
+         77 |         19        0.01       99.33
+         78 |         12        0.01       99.34
+         79 |          9        0.01       99.35
+         80 |          5        0.00       99.35
+         81 |          7        0.00       99.36
+         82 |          6        0.00       99.36
+         83 |          7        0.00       99.36
+         84 |          1        0.00       99.36
+         85 |          3        0.00       99.37
+         86 |          1        0.00       99.37
+         88 |          6        0.00       99.37
+         90 |          5        0.00       99.37
+         91 |          2        0.00       99.37
+         92 |          2        0.00       99.38
+         93 |          1        0.00       99.38
+         94 |          3        0.00       99.38
+         95 |          4        0.00       99.38
+         97 |          2        0.00       99.38
+         99 |        994        0.62      100.00
+------------+-----------------------------------
+--more--
+</pre></div></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Medicare PUF.html" class="btn btn-neutral float-right" title="Physician and Other Supplier Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Cleaning.html" class="btn btn-neutral float-left" title="Cleaning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jeremy J. Sze; Jaison Moreno; Omari-Khalid Rahman; Mohammed Husain
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

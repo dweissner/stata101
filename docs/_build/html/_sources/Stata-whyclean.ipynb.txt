@@ -1,0 +1,897 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Do I need to clean my data?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The short answer is **always** assume your data needs to be cleaned. Data collection is rarely perfect, and even if the data is collected perfectly there are multiple points in the data pipeline where errors can be introduced. Data errors can be catastrophic for a myriad of reasons; modern analytic methods require data to confirm to certain standards for your analysis to be valid, and in some cases regression models will not run if your data is not properly cleaned. For the purposes of this demonstration I will be using the 2003 Stop, Question and Frisk dataset from the [NYPD](https://www1.nyc.gov/site/nypd/stats/reports-analysis/stopfrisk.page). I also recommend downloading the data dictionary from [here](https://data.cityofnewyork.us/api/views/ftxv-d5ix/files/9cecce6d-baca-4a60-be9d-31501b5639f0?download=true&filename=2016-sqf-file-spec.xlsx)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Because the data is not in stata format (\\*.dta), we must import it into stata using the `import` command. In this case we will be using `import delimited` because the data is in text format with a delimiter. A delimiter separates values in your dataset. The most common type of delimiter is a comma, and files stored in this format usually end in .csv, which stands for comma separated values\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(111 vars, 160,851 obs)\n"
+     ]
+    }
+   ],
+   "source": [
+    "import delimited /home/omari/Downloads/2003.csv, clear"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Before proceeding to clean your data, it is often useful to look at metadata. Metadata is simply data that describes your data, and is usually available for public use datasets. The most common forms of metadata you'll encounter are data dictionaries and codebooks. See a detailed description of codebooks [here](https://www.icpsr.umich.edu/icpsrweb/content/shared/ICPSR/faqs/what-is-a-codebook.html). Data dictonaries are much leaner than codebooks, and focus primarily on providing information about data formats."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Contains data\n",
+      "  obs:       160,851                          \n",
+      " vars:           111                          \n",
+      " size:    58,388,913                          \n",
+      "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n",
+      "              storage   display    value\n",
+      "variable name   type    format     label      variable label\n",
+      "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n",
+      "year            int     %8.0g                 \n",
+      "pct             int     %8.0g                 \n",
+      "ser_num         long    %12.0g                \n",
+      "datestop        long    %12.0g                \n",
+      "timestop        str5    %9s                   \n",
+      "recstat         str1    %9s                   \n",
+      "inout           str1    %9s                   \n",
+      "trhsloc         str1    %9s                   \n",
+      "perobs          int     %8.0g                 \n",
+      "crimsusp        str30   %30s                  \n",
+      "perstop         int     %8.0g                 \n",
+      "typeofid        str1    %9s                   \n",
+      "explnstp        str1    %9s                   \n",
+      "othpers         str1    %9s                   \n",
+      "arstmade        str1    %9s                   \n",
+      "arstoffn        str30   %30s                  \n",
+      "sumissue        str1    %9s                   \n",
+      "sumoffen        str30   %30s                  \n",
+      "compyear        byte    %8.0g                 \n",
+      "comppct         byte    %8.0g                 \n",
+      "offunif         str1    %9s                   \n",
+      "officrid        str1    %9s                   \n",
+      "frisked         str1    %9s                   \n",
+      "searched        str1    %9s                   \n",
+      "contrabn        str1    %9s                   \n",
+      "adtlrept        str1    %9s                   \n",
+      "pistol          str1    %9s                   \n",
+      "riflshot        str1    %9s                   \n",
+      "asltweap        str1    %9s                   \n",
+      "knifcuti        str1    %9s                   \n",
+      "machgun         str1    %9s                   \n",
+      "othrweap        str1    %9s                   \n",
+      "pf_hands        str1    %9s                   \n",
+      "pf_wall         str1    %9s                   \n",
+      "pf_grnd         str1    %9s                   \n",
+      "pf_drwep        str1    %9s                   \n",
+      "pf_ptwep        str1    %9s                   \n",
+      "pf_baton        str1    %9s                   \n",
+      "pf_hcuff        str1    %9s                   \n",
+      "pf_pepsp        str1    %9s                   \n",
+      "pf_other        str1    %9s                   \n",
+      "radio           str1    %9s                   \n",
+      "ac_rept         str1    %9s                   \n",
+      "ac_inves        str1    %9s                   \n",
+      "rf_vcrim        str1    %9s                   \n",
+      "rf_othsw        str1    %9s                   \n",
+      "ac_proxm        str1    %9s                   \n",
+      "rf_attir        str1    %9s                   \n",
+      "cs_objcs        str1    %9s                   \n",
+      "cs_descr        str1    %9s                   \n",
+      "cs_casng        str1    %9s                   \n",
+      "cs_lkout        str1    %9s                   \n",
+      "rf_vcact        str1    %9s                   \n",
+      "cs_cloth        str1    %9s                   \n",
+      "cs_drgtr        str1    %9s                   \n",
+      "ac_evasv        str1    %9s                   \n",
+      "ac_assoc        str1    %9s                   \n",
+      "cs_furtv        str1    %9s                   \n",
+      "rf_rfcmp        str1    %9s                   \n",
+      "ac_cgdir        str1    %9s                   \n",
+      "rf_verbl        str1    %9s                   \n",
+      "cs_vcrim        str1    %9s                   \n",
+      "cs_bulge        str1    %9s                   \n",
+      "cs_other        str1    %9s                   \n",
+      "ac_incid        str1    %9s                   \n",
+      "ac_time         str1    %9s                   \n",
+      "rf_knowl        str1    %9s                   \n",
+      "ac_stsnd        str1    %9s                   \n",
+      "ac_other        str1    %9s                   \n",
+      "sb_hdobj        str1    %9s                   \n",
+      "sb_outln        str1    %9s                   \n",
+      "sb_admis        str1    %9s                   \n",
+      "sb_other        str1    %9s                   \n",
+      "repcmd          str4    %9s                   \n",
+      "revcmd          str4    %9s                   \n",
+      "rf_furt         str1    %9s                   \n",
+      "rf_bulg         str1    %9s                   \n",
+      "offverb         str1    %9s                   \n",
+      "offshld         str1    %9s                   \n",
+      "sex             str1    %9s                   \n",
+      "race            str1    %9s                   \n",
+      "dob             str8    %9s                   \n",
+      "age             str4    %9s                   \n",
+      "ht_feet         str1    %9s                   \n",
+      "ht_inch         str2    %9s                   \n",
+      "weight          str5    %9s                   \n",
+      "haircolr        str2    %9s                   \n",
+      "eyecolor        str2    %9s                   \n",
+      "build           str1    %9s                   \n",
+      "othfeatr        str1    %9s                   \n",
+      "addrtyp         str1    %9s                   \n",
+      "--more--\n"
+     ]
+    }
+   ],
+   "source": [
+    "/* This is a Stata comment. It allows us to write notes in our code that Stata will not execute.\n",
+    "If we do not specify it as a comment, Stata will attempt run our notes as code and will return a syntax error.\n",
+    "Multi line comments must be enclosed between /* ... */ */\n",
+    "\n",
+    "// Alternatively, single line comments only require // and don't need to be enclosed. \n",
+    "\n",
+    "// describe lists all variables in our datasets and gives information about their storage type\n",
+    "describe "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The two most frequent types of variables you'll encounter in Stata are character and numeric. Numeric variables can be stored as `int`, `byte`, `float`, `long` and `double`; character variables are stored as `str` (strings). The number at the end of `str` gives the width of the string, which is the maximum number of characters the string can hold. An important part of data cleaning is ensuring your variables are in the right format. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "              storage   display    value\n",
+      "variable name   type    format     label      variable label\n",
+      "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n",
+      "age             str4    %9s                   \n"
+     ]
+    }
+   ],
+   "source": [
+    "/* The describe command from earlier can take variables as arguments. */\n",
+    "describe age"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "    Variable |        Obs        Mean    Std. Dev.       Min        Max\n",
+      "-------------+---------------------------------------------------------\n",
+      "         age |          0\n"
+     ]
+    }
+   ],
+   "source": [
+    "sum age"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "        age |      Freq.     Percent        Cum.\n",
+      "------------+-----------------------------------\n",
+      "            |        162        0.10        0.10\n",
+      "          0 |      6,349        3.95        4.05\n",
+      "          1 |        168        0.10        4.15\n",
+      "         10 |         42        0.03        4.18\n",
+      "        103 |          1        0.00        4.18\n",
+      "         11 |         61        0.04        4.22\n",
+      "        110 |          1        0.00        4.22\n",
+      "        113 |          1        0.00        4.22\n",
+      "        114 |          1        0.00        4.22\n",
+      "        115 |          1        0.00        4.22\n",
+      "         12 |        268        0.17        4.39\n",
+      "        120 |          5        0.00        4.39\n",
+      "        121 |          1        0.00        4.39\n",
+      "       1271 |          1        0.00        4.39\n",
+      "         13 |        811        0.50        4.89\n",
+      "        130 |          7        0.00        4.90\n",
+      "       1316 |          1        0.00        4.90\n",
+      "        132 |          1        0.00        4.90\n",
+      "        135 |          3        0.00        4.90\n",
+      "         14 |      2,383        1.48        6.38\n",
+      "        140 |         13        0.01        6.39\n",
+      "        145 |          6        0.00        6.40\n",
+      "        147 |          1        0.00        6.40\n",
+      "        148 |          1        0.00        6.40\n",
+      "        149 |          2        0.00        6.40\n",
+      "         15 |      4,893        3.04        9.44\n",
+      "        150 |         12        0.01        9.45\n",
+      "        154 |          1        0.00        9.45\n",
+      "        155 |          5        0.00        9.45\n",
+      "        156 |          1        0.00        9.45\n",
+      "        157 |          1        0.00        9.45\n",
+      "        158 |          1        0.00        9.45\n",
+      "         16 |      7,340        4.56       14.02\n",
+      "        160 |         10        0.01       14.02\n",
+      "        165 |         10        0.01       14.03\n",
+      "       1655 |          1        0.00       14.03\n",
+      "        169 |          1        0.00       14.03\n",
+      "         17 |      9,063        5.63       19.66\n",
+      "        170 |          8        0.00       19.67\n",
+      "       1742 |          1        0.00       19.67\n",
+      "        175 |          3        0.00       19.67\n",
+      "         18 |     10,175        6.33       26.00\n",
+      "        180 |         11        0.01       26.00\n",
+      "        181 |          1        0.00       26.00\n",
+      "        185 |          7        0.00       26.01\n",
+      "        187 |          2        0.00       26.01\n",
+      "        189 |          5        0.00       26.01\n",
+      "         19 |      9,677        6.02       32.03\n",
+      "        190 |          9        0.01       32.04\n",
+      "        195 |          4        0.00       32.04\n",
+      "        196 |          1        0.00       32.04\n",
+      "        198 |          2        0.00       32.04\n",
+      "          2 |         37        0.02       32.06\n",
+      "         20 |     11,168        6.94       39.01\n",
+      "        200 |          4        0.00       39.01\n",
+      "        205 |          6        0.00       39.01\n",
+      "        206 |          3        0.00       39.01\n",
+      "         21 |      7,727        4.80       43.82\n",
+      "        210 |          4        0.00       43.82\n",
+      "        213 |          3        0.00       43.82\n",
+      "        214 |          2        0.00       43.82\n",
+      "        215 |          1        0.00       43.82\n",
+      "        219 |          1        0.00       43.82\n",
+      "         22 |      8,182        5.09       48.91\n",
+      "        220 |          5        0.00       48.91\n",
+      "        221 |          2        0.00       48.92\n",
+      "        222 |          2        0.00       48.92\n",
+      "        223 |          3        0.00       48.92\n",
+      "        224 |          2        0.00       48.92\n",
+      "        225 |          1        0.00       48.92\n",
+      "         23 |      7,487        4.65       53.58\n",
+      "        230 |          3        0.00       53.58\n",
+      "        232 |          1        0.00       53.58\n",
+      "        235 |          2        0.00       53.58\n",
+      "        236 |          1        0.00       53.58\n",
+      "        239 |          1        0.00       53.58\n",
+      "         24 |      5,404        3.36       56.94\n",
+      "        240 |          3        0.00       56.94\n",
+      "        241 |          1        0.00       56.94\n",
+      "        244 |          1        0.00       56.94\n",
+      "        245 |          1        0.00       56.94\n",
+      "        247 |          3        0.00       56.95\n",
+      "         25 |      5,988        3.72       60.67\n",
+      "        250 |          1        0.00       60.67\n",
+      "        254 |          1        0.00       60.67\n",
+      "        255 |          1        0.00       60.67\n",
+      "        258 |          1        0.00       60.67\n",
+      "         26 |      4,223        2.63       63.30\n",
+      "        265 |          1        0.00       63.30\n",
+      "        269 |          2        0.00       63.30\n",
+      "         27 |      3,834        2.38       65.68\n",
+      "        270 |          2        0.00       65.68\n",
+      "         28 |      3,499        2.18       67.86\n",
+      "        280 |          3        0.00       67.86\n",
+      "        285 |          1        0.00       67.86\n",
+      "        287 |          2        0.00       67.86\n",
+      "         29 |      2,965        1.84       69.70\n",
+      "--more--\n"
+     ]
+    }
+   ],
+   "source": [
+    "tab age"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Stata returns 0 observations when we try to calculate the mean and standard deviation of age using the `sum` (summarize) command, However, when we `tab` (tabulate) it shows us a range of values and more than 0 observations.  This is because age is stored as a string variable, and we are unable to perform arithmetic operations on string variables. In order for us to include age in our analysis, we must convert it to a numeric variable. As we saw earlier, there are multiple formats for numerical variables, so which format should we convert age to? `byte`, `int`, and `long` can only store integers (whole numbers), whereas `float` and `double` can store both integers and decimals. `float` and `double` consume more memory to store information, so it is not computationally efficient to store a whole numbers as a `float`. See this Stata [help file](https://www.stata.com/manuals13/ddatatypes.pdf) for more information. To determine what numeric format we should convert age to we must first examine the values of age."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We see that all the values of age are whole numbers, so we should not convert it to a `float` or `double`. There are also values of age that exceeds 100, so it cannot be stored as a `byte`. Logically, it makes sense to store it as an integer. We'll do so using the `destring` command."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "age: all characters numeric; age_cleaned generated as int\n",
+      "(162 missing values generated)\n"
+     ]
+    }
+   ],
+   "source": [
+    "destring age, gen(age_cleaned)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Byte can only store a maximum value of 100, and we can see from the frequency table that there are values of age that exceed 100. Because of this Stata choses to convert age to `int`, and our optional argument `gen()` creates a new variable (or column). Stata stores all datasets as 2-dimensional arrays; variables are stored as columns and observations are stored as rows. Alternatively, we could have specified `replace` in lieu of `gen()` and Stata would have overwritten our age column instead of creating a new one. This option is risky and should be used with caution. Another thing you may have noticed is that Stata created 162 missing values. This is the result of Stata converting an empty string to a numeric value. The first row of our frequency table shows 162 people with no values for age."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "    Variable |        Obs        Mean    Std. Dev.       Min        Max\n",
+      "-------------+---------------------------------------------------------\n",
+      " age_cleaned |    160,689    31.76657    225.3125          0       9999\n"
+     ]
+    }
+   ],
+   "source": [
+    "sum age_cleaned"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "                         age_cleaned\n",
+      "-------------------------------------------------------------\n",
+      "      Percentiles      Smallest\n",
+      " 1%            0              0\n",
+      " 5%           14              0\n",
+      "10%           16              0       Obs             160,689\n",
+      "25%           18              0       Sum of Wgt.     160,689\n",
+      "\n",
+      "50%           23                      Mean           31.76657\n",
+      "                        Largest       Std. Dev.      225.3125\n",
+      "75%           32           9999\n",
+      "90%           43           9999       Variance       50765.73\n",
+      "95%           49           9999       Skewness       43.67801\n",
+      "99%           72           9999       Kurtosis       1930.646\n"
+     ]
+    }
+   ],
+   "source": [
+    "sum age_cleaned, d"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We're now able to calculate the mean of age using our \"cleaned\" age variable. However our detailed summary (that's what the `, d` stands for) shows that we have rather unrealistic values of age, such as 9999. The most straightforward way to deal with unrealistic values of a variable is to replaced them as missing, thus removing the values from our analysis and preventing them from potentially skewing our results. While this may be the most straightforward way, it is often the least desirable way due to the loss of observations.  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(405 real changes made, 405 to missing)\n"
+     ]
+    }
+   ],
+   "source": [
+    "replace age_cleaned = . if age_cleaned>100"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "                         age_cleaned\n",
+      "-------------------------------------------------------------\n",
+      "      Percentiles      Smallest\n",
+      " 1%            0              0\n",
+      " 5%           14              0\n",
+      "10%           16              0       Obs             160,284\n",
+      "25%           18              0       Sum of Wgt.     160,284\n",
+      "\n",
+      "50%           23                      Mean           26.01252\n",
+      "                        Largest       Std. Dev.       12.9699\n",
+      "75%           32             99\n",
+      "90%           42             99       Variance       168.2183\n",
+      "95%           49             99       Skewness        1.52006\n",
+      "99%           64             99       Kurtosis       8.901667\n"
+     ]
+    }
+   ],
+   "source": [
+    "sum age_cleaned, d"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We now see that the mean value of age is slightly lower, and the standard deviation is much smaller. Given the extremely small number of observations that are lost due to converting the extreme values to missing (405 out of 160,851), it may be sufficient to simply leave the values as missing. However if we were to lose more substantial amounts of observations by converting the extreme values to missing, it would be necessary to exlpore ways to impute those missing values with a more realistic number. Imputing the mean value is a popular choice. There are also statistical methods that can be used to impute missing values by way of predictive modeling. The latter is much more advanced than this tutorial aims to be, so we'll resort to the former."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "scalars:\n",
+      "                r(p99) =  64\n",
+      "                r(p95) =  49\n",
+      "                r(p90) =  42\n",
+      "                r(p75) =  32\n",
+      "                r(p50) =  23\n",
+      "                r(p25) =  18\n",
+      "                r(p10) =  16\n",
+      "                 r(p5) =  14\n",
+      "                 r(p1) =  0\n",
+      "                r(max) =  99\n",
+      "                r(min) =  0\n",
+      "                r(sum) =  4169391\n",
+      "           r(kurtosis) =  8.901666570994999\n",
+      "           r(skewness) =  1.520059538798137\n",
+      "                 r(sd) =  12.96990027108677\n",
+      "                r(Var) =  168.2183130419367\n",
+      "               r(mean) =  26.01252152429438\n",
+      "              r(sum_w) =  160284\n",
+      "                  r(N) =  160284\n"
+     ]
+    }
+   ],
+   "source": [
+    "return list"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Stata stores the results of most of its computational commands in temporary scalars/vectors/matrices that can be viewed with `return list`. It is temporary because the next computational command will overwrite the current content of `return list`, and all content is lost when Stata is closed."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "variable age_cleaned was int now float\n",
+      "(567 real changes made)\n"
+     ]
+    }
+   ],
+   "source": [
+    "replace age_cleaned = r(mean) if age_cleaned==."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We' ve now replaced the 405 missing values we created in our previous step, as well as the 162 missing values that were already by imputing the mean value."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "                         age_cleaned\n",
+      "-------------------------------------------------------------\n",
+      "      Percentiles      Smallest\n",
+      " 1%            0              0\n",
+      " 5%           14              0\n",
+      "10%           16              0       Obs             160,851\n",
+      "25%           18              0       Sum of Wgt.     160,851\n",
+      "\n",
+      "50%           23                      Mean           26.01252\n",
+      "                        Largest       Std. Dev.      12.94702\n",
+      "75%           32             99\n",
+      "90%           42             99       Variance       167.6253\n",
+      "95%           48             99       Skewness       1.522746\n",
+      "99%           64             99       Kurtosis       8.933156\n"
+     ]
+    }
+   ],
+   "source": [
+    "sum age_cleaned, d"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Because r(mean) was a float (had decimal places), it changed our age_cleaned from int to float. In order to return to integer, we can use the `recast` command which will truncate all floats and keep only the numbers to the left of the decimal. Note, truncation does not round up or round down. It only returns numbers to the left of the decimal."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "age_cleaned |      Freq.     Percent        Cum.\n",
+      "------------+-----------------------------------\n",
+      "          0 |      6,349        3.95        3.95\n",
+      "          1 |        168        0.10        4.05\n",
+      "          2 |         37        0.02        4.07\n",
+      "          3 |         23        0.01        4.09\n",
+      "          4 |         12        0.01        4.10\n",
+      "          5 |         83        0.05        4.15\n",
+      "          6 |         21        0.01        4.16\n",
+      "          7 |          5        0.00        4.16\n",
+      "          8 |          3        0.00        4.17\n",
+      "          9 |          5        0.00        4.17\n",
+      "         10 |         42        0.03        4.20\n",
+      "         11 |         61        0.04        4.23\n",
+      "         12 |        268        0.17        4.40\n",
+      "         13 |        811        0.50        4.90\n",
+      "         14 |      2,383        1.48        6.39\n",
+      "         15 |      4,893        3.04        9.43\n",
+      "         16 |      7,340        4.56       13.99\n",
+      "         17 |      9,063        5.63       19.62\n",
+      "         18 |     10,175        6.33       25.95\n",
+      "         19 |      9,677        6.02       31.97\n",
+      "         20 |     11,168        6.94       38.91\n",
+      "         21 |      7,727        4.80       43.71\n",
+      "         22 |      8,182        5.09       48.80\n",
+      "         23 |      7,487        4.65       53.46\n",
+      "         24 |      5,404        3.36       56.81\n",
+      "         25 |      5,988        3.72       60.54\n",
+      "         26 |      4,223        2.63       63.16\n",
+      "   26.01252 |        567        0.35       63.52\n",
+      "         27 |      3,834        2.38       65.90\n",
+      "         28 |      3,499        2.18       68.07\n",
+      "         29 |      2,965        1.84       69.92\n",
+      "         30 |      3,781        2.35       72.27\n",
+      "         31 |      2,577        1.60       73.87\n",
+      "         32 |      2,891        1.80       75.67\n",
+      "         33 |      2,870        1.78       77.45\n",
+      "         34 |      2,405        1.50       78.95\n",
+      "         35 |      2,774        1.72       80.67\n",
+      "         36 |      2,149        1.34       82.01\n",
+      "         37 |      2,187        1.36       83.37\n",
+      "         38 |      2,157        1.34       84.71\n",
+      "         39 |      2,151        1.34       86.05\n",
+      "         40 |      2,620        1.63       87.67\n",
+      "         41 |      1,776        1.10       88.78\n",
+      "         42 |      2,081        1.29       90.07\n",
+      "         43 |      1,868        1.16       91.23\n",
+      "         44 |      1,374        0.85       92.09\n",
+      "         45 |      1,530        0.95       93.04\n",
+      "         46 |      1,143        0.71       93.75\n",
+      "         47 |      1,086        0.68       94.42\n",
+      "         48 |        945        0.59       95.01\n",
+      "         49 |        814        0.51       95.52\n",
+      "         50 |        873        0.54       96.06\n",
+      "         51 |        585        0.36       96.42\n",
+      "         52 |        705        0.44       96.86\n",
+      "         53 |        638        0.40       97.26\n",
+      "         54 |        429        0.27       97.53\n",
+      "         55 |        536        0.33       97.86\n",
+      "         56 |        328        0.20       98.06\n",
+      "         57 |        308        0.19       98.25\n",
+      "         58 |        265        0.16       98.42\n",
+      "         59 |        225        0.14       98.56\n",
+      "         60 |        233        0.14       98.70\n",
+      "         61 |        134        0.08       98.79\n",
+      "         62 |        170        0.11       98.89\n",
+      "         63 |        131        0.08       98.97\n",
+      "         64 |         76        0.05       99.02\n",
+      "         65 |         90        0.06       99.08\n",
+      "         66 |         57        0.04       99.11\n",
+      "         67 |         53        0.03       99.15\n",
+      "         68 |         39        0.02       99.17\n",
+      "         69 |         39        0.02       99.19\n",
+      "         70 |         48        0.03       99.22\n",
+      "         71 |         27        0.02       99.24\n",
+      "         72 |         31        0.02       99.26\n",
+      "         73 |         32        0.02       99.28\n",
+      "         74 |         21        0.01       99.29\n",
+      "         75 |         32        0.02       99.31\n",
+      "         76 |         15        0.01       99.32\n",
+      "         77 |         19        0.01       99.33\n",
+      "         78 |         12        0.01       99.34\n",
+      "         79 |          9        0.01       99.35\n",
+      "         80 |          5        0.00       99.35\n",
+      "         81 |          7        0.00       99.36\n",
+      "         82 |          6        0.00       99.36\n",
+      "         83 |          7        0.00       99.36\n",
+      "         84 |          1        0.00       99.36\n",
+      "         85 |          3        0.00       99.37\n",
+      "         86 |          1        0.00       99.37\n",
+      "         88 |          6        0.00       99.37\n",
+      "         90 |          5        0.00       99.37\n",
+      "         91 |          2        0.00       99.37\n",
+      "         92 |          2        0.00       99.38\n",
+      "         93 |          1        0.00       99.38\n",
+      "         94 |          3        0.00       99.38\n",
+      "         95 |          4        0.00       99.38\n",
+      "         97 |          2        0.00       99.38\n",
+      "         99 |        994        0.62      100.00\n",
+      "--more--\n"
+     ]
+    }
+   ],
+   "source": [
+    "tab age_cleaned"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "age_cleaned:  567 values would be changed; not changed\n"
+     ]
+    }
+   ],
+   "source": [
+    "recast int age_cleaned"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "`recast` produces an error because Stata does not want to truncate your floats. You can override this with the optional argument `force`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "age_cleaned:  567 values changed\n"
+     ]
+    }
+   ],
+   "source": [
+    "recast int age_cleaned, force"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "age_cleaned |      Freq.     Percent        Cum.\n",
+      "------------+-----------------------------------\n",
+      "          0 |      6,349        3.95        3.95\n",
+      "          1 |        168        0.10        4.05\n",
+      "          2 |         37        0.02        4.07\n",
+      "          3 |         23        0.01        4.09\n",
+      "          4 |         12        0.01        4.10\n",
+      "          5 |         83        0.05        4.15\n",
+      "          6 |         21        0.01        4.16\n",
+      "          7 |          5        0.00        4.16\n",
+      "          8 |          3        0.00        4.17\n",
+      "          9 |          5        0.00        4.17\n",
+      "         10 |         42        0.03        4.20\n",
+      "         11 |         61        0.04        4.23\n",
+      "         12 |        268        0.17        4.40\n",
+      "         13 |        811        0.50        4.90\n",
+      "         14 |      2,383        1.48        6.39\n",
+      "         15 |      4,893        3.04        9.43\n",
+      "         16 |      7,340        4.56       13.99\n",
+      "         17 |      9,063        5.63       19.62\n",
+      "         18 |     10,175        6.33       25.95\n",
+      "         19 |      9,677        6.02       31.97\n",
+      "         20 |     11,168        6.94       38.91\n",
+      "         21 |      7,727        4.80       43.71\n",
+      "         22 |      8,182        5.09       48.80\n",
+      "         23 |      7,487        4.65       53.46\n",
+      "         24 |      5,404        3.36       56.81\n",
+      "         25 |      5,988        3.72       60.54\n",
+      "         26 |      4,790        2.98       63.52\n",
+      "         27 |      3,834        2.38       65.90\n",
+      "         28 |      3,499        2.18       68.07\n",
+      "         29 |      2,965        1.84       69.92\n",
+      "         30 |      3,781        2.35       72.27\n",
+      "         31 |      2,577        1.60       73.87\n",
+      "         32 |      2,891        1.80       75.67\n",
+      "         33 |      2,870        1.78       77.45\n",
+      "         34 |      2,405        1.50       78.95\n",
+      "         35 |      2,774        1.72       80.67\n",
+      "         36 |      2,149        1.34       82.01\n",
+      "         37 |      2,187        1.36       83.37\n",
+      "         38 |      2,157        1.34       84.71\n",
+      "         39 |      2,151        1.34       86.05\n",
+      "         40 |      2,620        1.63       87.67\n",
+      "         41 |      1,776        1.10       88.78\n",
+      "         42 |      2,081        1.29       90.07\n",
+      "         43 |      1,868        1.16       91.23\n",
+      "         44 |      1,374        0.85       92.09\n",
+      "         45 |      1,530        0.95       93.04\n",
+      "         46 |      1,143        0.71       93.75\n",
+      "         47 |      1,086        0.68       94.42\n",
+      "         48 |        945        0.59       95.01\n",
+      "         49 |        814        0.51       95.52\n",
+      "         50 |        873        0.54       96.06\n",
+      "         51 |        585        0.36       96.42\n",
+      "         52 |        705        0.44       96.86\n",
+      "         53 |        638        0.40       97.26\n",
+      "         54 |        429        0.27       97.53\n",
+      "         55 |        536        0.33       97.86\n",
+      "         56 |        328        0.20       98.06\n",
+      "         57 |        308        0.19       98.25\n",
+      "         58 |        265        0.16       98.42\n",
+      "         59 |        225        0.14       98.56\n",
+      "         60 |        233        0.14       98.70\n",
+      "         61 |        134        0.08       98.79\n",
+      "         62 |        170        0.11       98.89\n",
+      "         63 |        131        0.08       98.97\n",
+      "         64 |         76        0.05       99.02\n",
+      "         65 |         90        0.06       99.08\n",
+      "         66 |         57        0.04       99.11\n",
+      "         67 |         53        0.03       99.15\n",
+      "         68 |         39        0.02       99.17\n",
+      "         69 |         39        0.02       99.19\n",
+      "         70 |         48        0.03       99.22\n",
+      "         71 |         27        0.02       99.24\n",
+      "         72 |         31        0.02       99.26\n",
+      "         73 |         32        0.02       99.28\n",
+      "         74 |         21        0.01       99.29\n",
+      "         75 |         32        0.02       99.31\n",
+      "         76 |         15        0.01       99.32\n",
+      "         77 |         19        0.01       99.33\n",
+      "         78 |         12        0.01       99.34\n",
+      "         79 |          9        0.01       99.35\n",
+      "         80 |          5        0.00       99.35\n",
+      "         81 |          7        0.00       99.36\n",
+      "         82 |          6        0.00       99.36\n",
+      "         83 |          7        0.00       99.36\n",
+      "         84 |          1        0.00       99.36\n",
+      "         85 |          3        0.00       99.37\n",
+      "         86 |          1        0.00       99.37\n",
+      "         88 |          6        0.00       99.37\n",
+      "         90 |          5        0.00       99.37\n",
+      "         91 |          2        0.00       99.37\n",
+      "         92 |          2        0.00       99.38\n",
+      "         93 |          1        0.00       99.38\n",
+      "         94 |          3        0.00       99.38\n",
+      "         95 |          4        0.00       99.38\n",
+      "         97 |          2        0.00       99.38\n",
+      "         99 |        994        0.62      100.00\n",
+      "------------+-----------------------------------\n",
+      "--more--\n"
+     ]
+    }
+   ],
+   "source": [
+    "tab age_cleaned"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Stata",
+   "language": "stata",
+   "name": "stata"
+  },
+  "language_info": {
+   "codemirror_mode": "stata",
+   "file_extension": ".do",
+   "mimetype": "text/x-stata",
+   "name": "stata",
+   "version": "15.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

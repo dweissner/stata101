@@ -14,6 +14,7 @@ Created by Jeremy J. Sze, Jaison Moreno, Omari-Khalid Rahman, Mohammed Husain
    Install.ipynb
    Import.ipynb
    Cleaning.ipynb
+   Stata-whyclean.ipynb
    Medicare PUF.ipynb
 
 Indices and tables
